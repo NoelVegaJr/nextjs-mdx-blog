@@ -1,5 +1,5 @@
 import fs from 'fs';
-import matter from 'gray-matter';
+import matter, { GrayMatterFile } from 'gray-matter';
 import path from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
 import SyntaxHighlighter from 'react-syntax-highlighter';
