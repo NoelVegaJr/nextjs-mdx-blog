@@ -36,17 +36,32 @@ const Home = ({ posts }: IHomeProps) => {
                         <i className=''>{post.frontMatter.date}</i>
 
                         <div className='flex flex-wrap'>
-                          {post.frontMatter.tags.map((tag: string) => {
-                            return (
-                              <div
-                                key={post.frontMatter.title}
-                                className='bg-blue-600 w-fit text-sm px-2 py-1 text-white rounded border hover:brightness-110 duration-300'
-                              >
-                                {tag}
-                              </div>
-                            );
-                          })}
+                          {post.frontMatter.tags.map(
+                            (tag: string, index: number) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className='bg-blue-600 w-fit text-sm px-2 py-1 text-white rounded border hover:brightness-110 duration-300'
+                                >
+                                  {tag}
+                                </div>
+                              );
+                            }
+                          )}
                         </div>
+                        {post.frontMatter.demoUrl && (
+                          <a
+                            href={'https://' + post.frontMatter.demoUrl}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            onClick={(e) => {
+                              console.log(post.frontMatter.demoUrl);
+                              e.stopPropagation();
+                            }}
+                          >
+                            Live Demo
+                          </a>
+                        )}
                       </div>
                     </div>
                     <div className='relative h-72 w-full md:w-1/2'>

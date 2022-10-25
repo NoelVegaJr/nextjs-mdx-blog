@@ -10,7 +10,7 @@ const Nav: React.FC<INavProps> = (props) => {
   return (
     <nav className=' border-b border-b-gray-400 p-6 flex items-center '>
       <Link href='/'>
-        <h2 className={`${logoStyles}  mr-12 text-3xl font-bold`}>Noel Vega</h2>
+        <h2 className={`${logoStyles}  mr-12 text-3xl font-bold`}>Code Fork</h2>
       </Link>
       <Link href='/bio'>
         <p className={`${baseLinkStyles} ${linkStyles}`}>Bio</p>
