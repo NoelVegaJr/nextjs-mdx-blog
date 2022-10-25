@@ -15,6 +15,10 @@ interface IPostPageProps {
 
 const PostPage = ({ frontMatter, mdxSource }: IPostPageProps) => {
   console.log('rendering post page');
+  if (!frontMatter) {
+    return <div>error</div>;
+  }
+  console.log(frontMatter);
   const { title, date } = frontMatter;
   return (
     <div>
