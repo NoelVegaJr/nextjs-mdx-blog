@@ -28,41 +28,45 @@ const Home = ({ posts }: IHomeProps) => {
               <main className='w-full flex flex-col items-center  justify-between gap-4'>
                 <div className='h-full w-full flex flex-col md:flex-row justify-between gap-4 '>
                   <div className='flex flex-col md:flex-row md:w-full justify-between gap-4'>
-                    <div className='flex flex-col '>
-                      <p className='font-semibold mb-2'>
-                        {post.frontMatter.description}
-                      </p>
-                      <div className='flex flex-col gap-2'>
-                        <i className=''>{post.frontMatter.date}</i>
+                    <div className='flex flex-col justify-between h-full'>
+                      <div>
+                        <p className='font-semibold mb-2'>
+                          {post.frontMatter.description}
+                        </p>
+                        <div className='flex flex-col gap-2 '>
+                          <i className=''>{post.frontMatter.date}</i>
 
-                        <div className='flex flex-wrap'>
-                          {post.frontMatter.tags.map(
-                            (tag: string, index: number) => {
-                              return (
-                                <div
-                                  key={index}
-                                  className='bg-blue-600 w-fit text-sm px-2 py-1 text-white rounded border hover:brightness-110 duration-300'
-                                >
-                                  {tag}
-                                </div>
-                              );
-                            }
-                          )}
+                          <div className='flex flex-wrap'>
+                            {post.frontMatter.tags.map(
+                              (tag: string, index: number) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className='bg-blue-600 w-fit text-sm px-2 py-1 text-white rounded border hover:brightness-110 duration-300'
+                                  >
+                                    {tag}
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
                         </div>
-                        {post.frontMatter.demoUrl && (
-                          <a
-                            href={'https://' + post.frontMatter.demoUrl}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            onClick={(e) => {
-                              console.log(post.frontMatter.demoUrl);
-                              e.stopPropagation();
-                            }}
-                          >
-                            Live Demo
-                          </a>
-                        )}
                       </div>
+                      {post.frontMatter.demoUrl && (
+                        <a
+                          href={'https://' + post.frontMatter.demoUrl}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          onClick={(e) => {
+                            console.log(post.frontMatter.demoUrl);
+                            e.stopPropagation();
+                          }}
+                          className='group bg-slate-900 text-white w-fit px-4 py-1 rounded hover:brightness-105'
+                        >
+                          Live Demo
+                          <div className='w-0 group-hover:w-full h-0.5 transition-all duration-500 ease-in-out bg-white' />
+                        </a>
+                      )}
                     </div>
                     <div className='relative h-72 w-full md:w-1/2'>
                       <Image
