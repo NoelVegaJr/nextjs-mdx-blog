@@ -9,7 +9,7 @@ import Button from '../../components/Button';
 const components = { Button, SyntaxHighlighter };
 
 interface IPostPageProps {
-  frontMatter: { [key: string]: any };
+  frontMatter: { title: string; date: string };
   mdxSource: MDXRemoteSerializeResult;
 }
 
