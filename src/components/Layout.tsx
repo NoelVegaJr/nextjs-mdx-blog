@@ -8,7 +8,7 @@ export interface ILayoutProps {
 export function Layout({ children }: ILayoutProps) {
   return (
     <>
-      <div className='h-screen w-screen mx-auto px-12'>
+      <div className='h-screen w-screen mx-auto sm:px-12'>
         <Nav />
         {children}
       </div>
