@@ -24,12 +24,10 @@ tags: ['react', 'nextjs', 'typescript', 'react-host-toast', 'autoanimate']
 <main className="flex flex-col gap-8">
   <div> 
     
-  <Step title={'1. Initialize a next js application'} steps={[`The &apos;.&apos; at the end will create a next app in the current directory.`,`You can replace the &apos;.&apos; with your desired project name and next will create a directory with the next app inside.`]}/>
-  <SyntaxHighlighter language='javascript'>
-    {`
-      npx create-next-app@latest --ts .
-    `}
-  </SyntaxHighlighter>
+  <Step title={'1. Initialize a next js application'} steps={[`The &apos;.&apos; at the end will create a next app in the current directory.`,`You can replace the &apos;.&apos; with your desired project name and next will create a directory with the next app inside.`]}
+  code='npx create-next-app@latest --ts .'
+  />
+
   </div>
 
   <div>
@@ -38,42 +36,33 @@ tags: ['react', 'nextjs', 'typescript', 'react-host-toast', 'autoanimate']
       `Next js gives us a index file already filled out.`,
       `Clear this file and include the following code.`]
       
-      }/>
-    <SyntaxHighlighter language='typescript'>
-      {`
+      }
+      code='
         const TodoPage: NextPage = () => { 
           return <div>My Todo App</div>
         }
 
-        export default TodoPage;
-
-      `}
-    </SyntaxHighlighter>
+        export default TodoPage;'
+      />
 
   </div>
 
-  <div>
-    <Step title={'3. Create heading'} steps={['Add a container and center it','Add a h1 for a title with 16px margin bottom']}/>
-    <SyntaxHighlighter language='typescript'>
-        {`
-        const TodoPage: NextPage = () => { 
-          return     (
-            <div
-                style={{
-                  width: '400px',
-                  margin: '0 auto',
-                }}
-              >
-                <h1 style={{ marginBottom: '16px' }}>Todos</h1>
-            </div>
-            )
+    <div>
+    <Step
+    title={'4. Add initial todos to the page'}
+    steps={['Create or copy and paste the initial todos below and past at top of file under imports',
+    'Add a h1 for a title with 16px margin bottom']}
+    code="
+          const initialTodos = [
+            { id: 1, title: 'todo #1', isCompleted: false },
+            { id: 2, title: 'todo #2', isCompleted: false },
+            { id: 3, title: 'todo #3', isCompleted: false },
+            { id: 4, title: 'todo #4', isCompleted: false },
+            { id: 5, title: 'todo #5', isCompleted: false },
+          ] as ITodo[];
 
-        }
-
-        export default TodoPage;
-
-      `}
-    </SyntaxHighlighter>
+      "
+      />
 
   </div>
 

@@ -1,5 +1,3 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
 import Image from 'next/image';
 import fs from 'fs';
 import path from 'path';
@@ -37,7 +35,7 @@ const Home = ({ posts }: IHomeProps) => {
                           <i className=''>{post.frontMatter.date}</i>
 
                           <div className='flex flex-wrap'>
-                            {post.frontMatter.tags.map(
+                            {post.frontMatter.tags?.map(
                               (tag: string, index: number) => {
                                 return (
                                   <div
@@ -92,11 +90,12 @@ export const getStaticProps = async () => {
   const files = fs.readdirSync(path.join('src', 'posts'));
 
   const posts = files.map((filename) => {
+    console.log('file: ', filename);
     const mardownWithMeta = fs.readFileSync(
       path.join('src', 'posts', filename)
     );
     const { data: frontMatter } = matter(mardownWithMeta);
-
+    console.log(frontMatter);
     return {
       frontMatter,
       slug: filename.split('.')[0],

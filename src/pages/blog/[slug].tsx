@@ -1,13 +1,12 @@
 import fs from 'fs';
-import matter, { GrayMatterFile } from 'gray-matter';
+import matter from 'gray-matter';
 import path from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { MDXRemote } from 'next-mdx-remote';
+
 import Button from '../../components/Button';
 import Step from '../../components/Step';
-const components = { Button, SyntaxHighlighter, Step };
+const components = { Button, Step };
 
 interface IPostPageProps {
   frontMatter: { title: string; date: string };
@@ -15,6 +14,7 @@ interface IPostPageProps {
 }
 
 const PostPage = ({ frontMatter, mdxSource }: IPostPageProps) => {
+  console.log(frontMatter);
   console.log('rendering post page');
   if (!frontMatter) {
     return <div>error</div>;
