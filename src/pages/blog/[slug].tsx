@@ -10,7 +10,7 @@ const components = { Button, SyntaxHighlighter };
 
 interface IPostPageProps {
   frontMatter: { title: string; date: string };
-  mdxSource: MDXRemoteSerializeResult;
+  mdxSource: any;
 }
 
 const PostPage = ({ frontMatter, mdxSource }: IPostPageProps) => {
