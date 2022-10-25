@@ -4,36 +4,77 @@ date: 'October 25, 2022'
 description: 'Lets build a basic todo app with React'
 thumbnailUrl: '/todo-beginner-thumbnail.jpeg'
 demoUrl: 'beginner-todo-app.codefork.dev'
-tags: ['react', 'vite', 'typescript', 'javascript']
+tags: ['react', 'nextjs', 'typescript', 'react-host-toast', 'autoanimate']
 ---
 
-<div>
-  This is a blog post about <strong>SolidJS</strong>. <br />
-  We'll learn about SolidJS and how to build with it.
+<div className='text-lg mb-6'>Today we'll learn how to create todo app.</div>
+
+<div className="mb-10">
+  <p className="font-semibold">Features included: </p>
+  <ol className='pl-8'>
+
+    <li className='list-decimal'>Create todo</li>
+    <li className='list-decimal'>Delete todo</li>
+    <li className='list-decimal'>Search todos's</li>
+    <li className='list-decimal'>Mark todo's complete</li>
+
+  </ol>
 </div>
 
-<br />
+<main className="flex flex-col gap-8">
+  <div> 
+    
+  <Step title={'1. Initialize a next js application'} steps={[`The &apos;.&apos; at the end will create a next app in the current directory.`,`You can replace the &apos;.&apos; with your desired project name and next will create a directory with the next app inside.`]}/>
+  <SyntaxHighlighter language='javascript'>
+    {`
+      npx create-next-app@latest --ts .
+    `}
+  </SyntaxHighlighter>
+  </div>
 
-### This is a Markdown sub-heading
+  <div>
+    <Step title={'2. Setup index file'} steps={[
+      `In /pages there will be a file named index.ts .`,
+      `Next js gives us a index file already filled out.`,
+      `Clear this file and include the following code.`]
+      
+      }/>
+    <SyntaxHighlighter language='typescript'>
+      {`
+        const TodoPage: NextPage = () => { 
+          return <div>My Todo App</div>
+        }
 
-We just used a `###` subheading in our blog post.
+        export default TodoPage;
 
-<SyntaxHighlighter language='javascript'>
-  {`
-    const doStuff = () => {
-      return console.log('hey')
-    }
-  `}
-</SyntaxHighlighter>
+      `}
+    </SyntaxHighlighter>
 
-```
-  // this is a code block
-  const doSomething = () => {
-    return console.log('hey')
-  }
-```
+  </div>
 
-<div>
-  Here, I'm using a component inside my MarkDown file:{' '}
-  {<Button text={'Click me'} />}
-</div>
+  <div>
+    <Step title={'3. Create heading'} steps={['Add a container and center it','Add a h1 for a title with 16px margin bottom']}/>
+    <SyntaxHighlighter language='typescript'>
+        {`
+        const TodoPage: NextPage = () => { 
+          return     (
+            <div
+                style={{
+                  width: '400px',
+                  margin: '0 auto',
+                }}
+              >
+                <h1 style={{ marginBottom: '16px' }}>Todos</h1>
+            </div>
+            )
+
+        }
+
+        export default TodoPage;
+
+      `}
+    </SyntaxHighlighter>
+
+  </div>
+
+</main>

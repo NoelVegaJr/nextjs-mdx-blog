@@ -6,7 +6,8 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { MDXRemote } from 'next-mdx-remote';
 import Button from '../../components/Button';
-const components = { Button, SyntaxHighlighter };
+import Step from '../../components/Step';
+const components = { Button, SyntaxHighlighter, Step };
 
 interface IPostPageProps {
   frontMatter: { title: string; date: string };
@@ -22,7 +23,7 @@ const PostPage = ({ frontMatter, mdxSource }: IPostPageProps) => {
   const { title, date } = frontMatter;
   return (
     <div>
-      <h1>{title}</h1>
+      <h1 className='text-3xl'>{title}</h1>
       <MDXRemote {...mdxSource} components={components}></MDXRemote>
     </div>
   );
