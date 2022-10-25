@@ -47,7 +47,7 @@ tags: ['react', 'nextjs', 'typescript', 'react-host-toast', 'autoanimate']
 
   </div>
 
-    <div>
+  <div>
     <Step
     title={'4. Add initial todos to the page'}
     steps={['Create or copy and paste the initial todos below and past at top of file under imports',
@@ -60,6 +60,46 @@ tags: ['react', 'nextjs', 'typescript', 'react-host-toast', 'autoanimate']
             { id: 4, title: 'todo #4', isCompleted: false },
             { id: 5, title: 'todo #5', isCompleted: false },
           ] as ITodo[];
+
+      "
+      />
+
+  </div>
+
+    <div>
+    <Step
+    title={'5. Create Todo Component'}
+    steps={['Create a component name Todo.',
+    'This todo compontent will render a todo.',
+    'We will then map over the initial todos if any and render each todo.']}
+    code="
+
+const Todo = ({
+id,
+title,
+isCompleted,
+}: ITodoOptions) => {
+return (
+
+<div
+  key={id}
+  style={{
+    border: '4px solid whitesmoke',
+    padding: '8px',
+    fontSize: '18px',
+    display: 'flex',
+    justifyContent: 'space-between',
+  }}
+>
+  <h5
+    style={{
+      textDecoration: isCompleted ? 'line-through' : '',
+    }}
+  >
+    {title}
+  </h5>
+</div>
+); };
 
       "
       />
