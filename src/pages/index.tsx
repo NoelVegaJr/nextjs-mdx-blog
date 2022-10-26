@@ -48,7 +48,7 @@ const Home = () => {
                       </div>
                       {post.demoUrl && (
                         <a
-                          href={'https://' + post.demoUrl}
+                          href={post.demoUrl}
                           target='_blank'
                           rel='noopener noreferrer'
                           onClick={(e) => {
