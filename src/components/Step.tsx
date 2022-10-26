@@ -21,7 +21,11 @@ const Step = ({ title, steps, code }: IStepProps) => {
           );
         })}
       </ol>
-      <SyntaxHighlighter language='javascript' style={atomOneDark}>
+      <SyntaxHighlighter
+        customStyle={{ paddingLeft: '20px' }}
+        language='javascript'
+        style={atomOneDark}
+      >
         {code}
       </SyntaxHighlighter>
     </div>

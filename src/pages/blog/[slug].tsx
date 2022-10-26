@@ -1,64 +1,58 @@
-import fs from 'fs';
-import matter from 'gray-matter';
-import path from 'path';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote } from 'next-mdx-remote';
-
 import Button from '../../components/Button';
 import Step from '../../components/Step';
 const components = { Button, Step };
+import { useRouter } from 'next/router';
+import { trpc } from '../../utils/trpc';
+import Image from 'next/image';
+import Link from 'next/link';
 
-interface IPostPageProps {
-  frontMatter: { title: string; date: string };
-  mdxSource: any;
-}
-
-const PostPage = ({ frontMatter, mdxSource }: IPostPageProps) => {
-  console.log(frontMatter);
-  console.log('rendering post page');
-  if (!frontMatter) {
-    return <div>error</div>;
+const PostPage = () => {
+  const router = useRouter();
+  const { slug: id } = router.query;
+  if (!id) {
+    router.push('/');
+    return;
   }
-  console.log(frontMatter);
-  const { title, date } = frontMatter;
+  console.log(Number(id));
+  const post = trpc.getBlogPostsById.useQuery({ id: Number(id) });
+
+  console.log('rendering post page');
+  console.log(id);
+
   return (
     <div>
-      <h1 className='text-3xl'>{title}</h1>
-      <MDXRemote {...mdxSource} components={components}></MDXRemote>
+      {post.data && (
+        <div>
+          <h2 className='text-4xl'>{post.data.title}</h2>
+          <i>{post.data.date}</i>
+
+          <div className='relative h-72 w-full md:w-1/2 mx-auto'>
+            <Image
+              src={post.data.thumbnailUrl}
+              alt='thumbnail'
+              layout='fill'
+              objectFit='contain'
+              className='rounded w-full absolute'
+            />
+          </div>
+          <div className='flex flex-col gap-4'>
+            <div>
+              <p>Description:</p>
+              <p>{post.data.description}</p>
+            </div>
+            <a
+              href={post.data.demoUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='bg-slate-900 text-white font-semibold px-4 p-2 w-fit rounded'
+            >
+              View Demo
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const getStaticPaths = async () => {
-  const files = fs.readdirSync(path.join('src', 'posts'));
-
-  const paths = files.map((filename: any) => ({
-    params: {
-      slug: filename.replace('.mdx', ''),
-    },
-  }));
-  console.log(paths);
-  return {
-    paths,
-    fallback: true,
-  };
-};
-
-const getStaticProps = async ({ params }: any) => {
-  const file = path.join('src', 'posts', params.slug + '.mdx');
-  const markdownWithMeta = fs.readFileSync(file);
-
-  const { data: frontMatter, content } = matter(markdownWithMeta);
-  const mdxSource = await serialize(content);
-
-  return {
-    props: {
-      frontMatter,
-      slug: params.slug,
-      mdxSource,
-    },
-  };
-};
-
-export { getStaticProps, getStaticPaths };
 export default PostPage;

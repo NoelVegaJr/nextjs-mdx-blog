@@ -3,6 +3,8 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Nav from '../components/Nav';
 import { Layout } from '../components/Layout';
+import type { AppType } from 'next/app';
+import { trpc } from '../utils/trpc';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -12,4 +14,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);
