@@ -11,10 +11,27 @@ datasource db {
 }
 
 model BlogPost {
-  id           Int    @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   title        String
   date         String
   description  String
   thumbnailUrl String
   demoUrl      String
+  steps        BlogPostStep[]
+}
+
+model BlogPostStep {
+  id         Int                   @id @default(autoincrement())
+  title      String
+  code       String
+  bullets    BlogPostStepBullets[]
+  blogPost   BlogPost              @relation(fields: [blogPostId], references: [id])
+  blogPostId Int
+}
+
+model BlogPostStepBullets {
+  id     Int          @id @default(autoincrement())
+  text   String
+  step   BlogPostStep @relation(fields: [stepId], references: [id])
+  stepId Int
 }
