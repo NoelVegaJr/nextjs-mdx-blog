@@ -9,8 +9,8 @@ interface IStepProps {
 const Step = ({ title, steps, code }: IStepProps) => {
   return (
     <div>
-      <h5 className='text-lg font-semibold'>{title}</h5>
-      <ol className='pl-8 mb-4'>
+      <h5 className='text-5xl font-bold'>{title}</h5>
+      <ol className='mb-4 pl-8'>
         {steps.map((step, index: number) => {
           return (
             <>

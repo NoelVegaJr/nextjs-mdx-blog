@@ -5,13 +5,19 @@ import Nav from '../components/Nav';
 import { Layout } from '../components/Layout';
 import type { AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
+import { SessionProvider } from 'next-auth/react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp: AppType = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}: any) => {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <SessionProvider session={session}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SessionProvider>
   );
-}
+};
 
 export default trpc.withTRPC(MyApp);

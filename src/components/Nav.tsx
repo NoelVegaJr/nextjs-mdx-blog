@@ -1,3 +1,4 @@
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 interface INavProps {}
@@ -6,15 +7,30 @@ const Nav: React.FC<INavProps> = (props) => {
   const baseLinkStyles = 'cursor-pointer underline-none';
   const linkStyles = 'text-xl';
   const logoStyles = `${baseLinkStyles}text-3xl`;
-
+  const { data: session } = useSession();
+  console.log(session);
   return (
-    <nav className=' border-b border-b-gray-400 p-6 flex items-center '>
-      <Link href='/'>
-        <h2 className={`${logoStyles}  mr-12 text-3xl font-bold`}>Code Fork</h2>
-      </Link>
-      <Link href='/bio'>
-        <p className={`${baseLinkStyles} ${linkStyles}`}>Bio</p>
-      </Link>
+    <nav className=' flex items-center justify-between border-b border-b-gray-400 p-6'>
+      <div className='flex items-center'>
+        <Link href='/'>
+          <a className={`${logoStyles}  mr-12 text-3xl font-bold`}>Code Fork</a>
+        </Link>
+        <Link href='/bio'>
+          <a className={`${baseLinkStyles} ${linkStyles}`}>Bio</a>
+        </Link>
+      </div>
+      <div className='flex items-center gap-4 text-xl'>
+        {!session ? (
+          <button onClick={() => signIn('google')}>Login</button>
+        ) : (
+          <>
+            <button onClick={() => signOut()}>Logout</button>
+            <Link href='/admin'>
+              <a className={`${baseLinkStyles} ${linkStyles}`}>Admin</a>
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };

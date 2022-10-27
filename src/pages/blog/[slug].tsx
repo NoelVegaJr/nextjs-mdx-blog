@@ -1,14 +1,15 @@
-import Button from '../../components/Button';
-import Step from '../../components/Step';
-const components = { Button, Step };
 import { useRouter } from 'next/router';
 import { trpc } from '../../utils/trpc';
 import Image from 'next/image';
-import Link from 'next/link';
+import ViewerStep from '../../components/Admin/Step/ViewerStep';
 
 const PostPage = () => {
   const router = useRouter();
   const { slug: id } = router.query;
+  const steps = trpc.getStepsByBlogPostId.useQuery({
+    id: Number(id),
+  });
+
   if (!id) {
     router.push('/');
     return;
@@ -19,37 +20,62 @@ const PostPage = () => {
   console.log('rendering post page');
   console.log(id);
 
-  return (
-    <div>
-      {post.data && (
-        <div>
-          <h2 className='text-4xl'>{post.data.title}</h2>
-          <i>{post.data.date}</i>
+  if (!steps.data || steps.isLoading || steps.error) {
+    return <div>Loading</div>;
+  }
 
-          <div className='relative h-72 w-full md:w-1/2 mx-auto'>
-            <Image
-              src={post.data.thumbnailUrl}
-              alt='thumbnail'
-              layout='fill'
-              objectFit='contain'
-              className='rounded w-full absolute'
-            />
-          </div>
-          <div className='flex flex-col gap-4'>
-            <div>
-              <p>Description:</p>
-              <p>{post.data.description}</p>
+  console.log(post.data);
+  console.log(post.data?.user?.image);
+  return (
+    <div className=' container mx-auto max-w-4xl'>
+      {post.data && (
+        <>
+          <header className='mb-12 mt-6'>
+            <div className='mb-2 text-center'>
+              <h2 className=' text-7xl font-bold text-blue-600'>
+                {post.data.title}
+              </h2>
+              <div className='flex items-center justify-center gap-4'>
+                {post.data.user?.image && (
+                  <Image
+                    src={post.data.user?.image!}
+                    alt='user avatar'
+                    width={40}
+                    height={40}
+                    className='rounded-full'
+                  />
+                )}
+                <div>
+                  <p className='text-lg font-semibold'>{post.data.user.name}</p>
+                  <p className='font-semibold text-slate-500'>
+                    {post.data.date}
+                  </p>
+                </div>
+              </div>
             </div>
-            <a
-              href={post.data.demoUrl}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='bg-slate-900 text-white font-semibold px-4 p-2 w-fit rounded'
-            >
-              View Demo
-            </a>
-          </div>
-        </div>
+            <div className='mx-auto w-fit'>
+              <Image
+                src={post.data.thumbnailUrl}
+                alt={'blog post thumbnail'}
+                width={600}
+                height={400}
+                className=''
+              />
+            </div>
+            <p className='text-xl'>Description:</p>
+            <p className='text-xl '>&emsp;{post.data.description}</p>
+          </header>
+
+          <ul className='flex flex-col gap-12 '>
+            {post.data.steps.map((step) => {
+              return (
+                <li key={id + step.id.toString()} className=''>
+                  <ViewerStep step={step} />
+                </li>
+              );
+            })}
+          </ul>
+        </>
       )}
     </div>
   );

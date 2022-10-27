@@ -1,10 +1,10 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import * as React from 'react';
 import { useState } from 'react';
 import uploadImage from '../../utils/imageUpload';
 import { trpc } from '../../utils/trpc';
-import Dropdown from '../Dropdown';
 import Input from '../Input';
 
 interface INewBlogPostFormProps {}
@@ -18,12 +18,13 @@ const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = (
   const [description, setDescription] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState<File | null>();
   const [demoUrl, setDemoUrl] = useState('');
+  const { data: session } = useSession();
 
   const [testRef] = useAutoAnimate<HTMLDivElement>();
 
   const sumbitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!thumbnailUrl || !demoUrl) return;
+    if (!thumbnailUrl || (!demoUrl && !session?.user)) return;
     const thumbnailUrlCloudinary = await uploadImage(thumbnailUrl);
 
     const blogPost = {
@@ -32,6 +33,7 @@ const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = (
       description,
       thumbnailUrl: thumbnailUrlCloudinary.secure_url,
       demoUrl: demoUrl?.toString(),
+      email: session?.user?.email!,
     };
 
     createBlogPost.mutate(blogPost);
@@ -44,68 +46,66 @@ const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = (
   };
 
   return (
-    <div className='mt-10 border border-slate-400 p-6 rounded' ref={testRef}>
-      <Dropdown>
-        <form onSubmit={sumbitHandler} className='flex flex-col gap-4 mt-8'>
-          <Input
-            id={'title'}
-            label='Title'
-            type='text'
-            placeholder='title'
-            value={title}
-            setValue={setTitle}
-          />
-          <Input
-            label='Date created'
-            id='date'
-            type='date'
-            value={date}
-            placeholder={''}
-            setValue={setDate}
-          />
-          <Input
-            label='Description'
-            id='description'
-            type='text'
-            placeholder='description'
-            value={description}
-            setValue={setDescription}
-          />
-          <div>
-            <p>Choose a thumbnail</p>
-            <input
-              onChange={(e) => setThumbnailUrl(e.target.files![0])}
-              accept='.jpg, .png, .jpeg'
-              className='fileInput mb-2'
-              type='file'
-              name='Choose thumbnail'
-            ></input>
-          </div>
-          <Input
-            label='Demo url'
-            id='demo'
-            type='text'
-            placeholder='demo url'
-            value={demoUrl}
-            setValue={setDemoUrl}
-          />
+    <div className='mt-10 rounded border border-slate-400 p-6' ref={testRef}>
+      <form onSubmit={sumbitHandler} className='mt-8 flex flex-col gap-4'>
+        <Input
+          id={'title'}
+          label='Title'
+          type='text'
+          placeholder='title'
+          value={title}
+          setValue={setTitle}
+        />
+        <Input
+          label='Date created'
+          id='date'
+          type='date'
+          value={date}
+          placeholder={''}
+          setValue={setDate}
+        />
+        <Input
+          label='Description'
+          id='description'
+          type='text'
+          placeholder='description'
+          value={description}
+          setValue={setDescription}
+        />
+        <div>
+          <p>Choose a thumbnail</p>
+          <input
+            onChange={(e) => setThumbnailUrl(e.target.files![0])}
+            accept='.jpg, .png, .jpeg'
+            className='fileInput mb-2'
+            type='file'
+            name='Choose thumbnail'
+          ></input>
+        </div>
+        <Input
+          label='Demo url'
+          id='demo'
+          type='text'
+          placeholder='demo url'
+          value={demoUrl}
+          setValue={setDemoUrl}
+        />
 
-          {/* <input type='text' placeholder='tags' /> */}
-          <button
-            type='submit'
-            className='bg-green-600 text-white p-2 text-lg font-semibold rounded hover:bg-green-700 transition-all duration-300 '
-          >
-            Submit
-          </button>
-          <button
-            type='button'
-            className='bg-red-600 text-white p-2 text-lg font-semibold rounded hover:bg-red-700 transition-all duration-300 '
-            onClick={() => {}}
-          >
-            Cancel
-          </button>
-        </form>
-      </Dropdown>
+        {/* <input type='text' placeholder='tags' /> */}
+        <button
+          type='submit'
+          className='rounded bg-green-600 p-2 text-lg font-semibold text-white transition-all duration-300 hover:bg-green-700 '
+        >
+          Submit
+        </button>
+        <button
+          type='button'
+          className='rounded bg-red-600 p-2 text-lg font-semibold text-white transition-all duration-300 hover:bg-red-700 '
+          onClick={() => {}}
+        >
+          Cancel
+        </button>
+      </form>
     </div>
   );
 };

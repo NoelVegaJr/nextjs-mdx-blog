@@ -13,6 +13,7 @@ export const appRouter = router({
         description: z.string(),
         thumbnailUrl: z.string(),
         demoUrl: z.string(),
+        email: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -39,10 +40,77 @@ export const appRouter = router({
         where: {
           id: input.id,
         },
+        include: {
+          steps: {
+            include: {
+              bullets: true,
+            },
+          },
+          user: true,
+        },
       });
 
       console.log(blogPost);
       return blogPost;
+    }),
+  createBlogPostStep: publicProcedure
+    .input(
+      z.object({
+        blogPostId: z.number(),
+        title: z.string(),
+        bullets: z.string().array(),
+        code: z.string(),
+        index: z.number(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      console.log(input);
+      await prisma.blogPostStep.create({
+        data: {
+          blogPostId: input.blogPostId,
+          title: input.title,
+          code: input.code,
+          index: input.index,
+        },
+      });
+    }),
+  editBlogPostStep: publicProcedure
+    .input(
+      z.object({
+        blogPostId: z.number(),
+        id: z.number(),
+        title: z.string(),
+        bullets: z.string().array(),
+        code: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      console.log(input);
+      await prisma.blogPostStep.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          title: input.title,
+          code: input.code,
+        },
+      });
+    }),
+  getStepsByBlogPostId: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const steps = await prisma.blogPostStep.findMany({
+        where: {
+          blogPostId: input.id,
+        },
+      });
+
+      console.log('STEPS: ', steps);
+      return steps;
     }),
 });
 

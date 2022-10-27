@@ -15,7 +15,7 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
       {!creatingNewBlogPost ? (
         <button
           onClick={() => isCreatingNewBlogPost(true)}
-          className='bg-slate-800 w-full p-4 text-white font-semibold text-lg rounded'
+          className='w-full rounded bg-slate-800 p-4 text-lg font-semibold text-white '
         >
           Create a new Blog Post
         </button>
@@ -29,8 +29,8 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
           {blogPosts.data.map((blogPost: any) => {
             return (
               <li key={blogPost.id}>
-                <Link href={'/admin/blog/' + ''}>
-                  <a href=''>{blogPost.title}</a>
+                <Link href={'/admin/blog-posts/' + blogPost.id}>
+                  {blogPost.title}
                 </Link>
               </li>
             );
