@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface IBlogCardProps {
   title: string;
@@ -38,32 +39,34 @@ const BlogCard: React.FunctionComponent<IBlogCardProps> = ({
                     <i className=''>{date}</i>
 
                     {/* <div className='flex flex-wrap'>
-                          {post.tags?.map((tag: string, index: number) => {
-                            return (
-                              <div
-                                key={index}
-                                className='w-fit rounded border bg-blue-600 px-2 py-1 text-sm text-white duration-300 hover:brightness-110'
-                              >
-                                {tag}
-                              </div>
-                            );
-                          })}
-                        </div> */}
+                      {post.tags?.map((tag: string, index: number) => {
+                        return (
+                          <div
+                            key={index}
+                            className='w-fit rounded border bg-blue-600 px-2 py-1 text-sm text-white duration-300 hover:brightness-110'
+                          >
+                            {tag}
+                          </div>
+                        );
+                      })}
+                    </div> */}
                   </div>
                 </div>
                 {demoUrl && (
-                  <a
-                    href={demoUrl}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className='group w-fit rounded bg-slate-900 px-4 py-1 text-white hover:brightness-105'
-                  >
-                    Live Demo
-                    <div className='h-0.5 w-0 bg-white transition-all duration-500 ease-in-out group-hover:w-full' />
-                  </a>
+                  <Link href={demoUrl}>
+                    <a
+                      href=''
+                      // target='_blank'
+                      // rel='noopener noreferrer'
+                      // onClick={(e) => {
+                      //   e.stopPropagation();
+                      // }}
+                      className='group w-fit rounded bg-slate-900 px-4 py-1 text-white hover:brightness-105'
+                    >
+                      <p>{demoUrl}</p>
+                      <div className='h-0.5 w-0 bg-white transition-all duration-500 ease-in-out group-hover:w-full' />
+                    </a>
+                  </Link>
                 )}
               </div>
               <div className='md:justify-right relative mx-auto flex w-full justify-center md:w-2/4 md:justify-end'>

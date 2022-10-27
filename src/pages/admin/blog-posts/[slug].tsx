@@ -29,7 +29,7 @@ const AdminPostPage = () => {
     <div className='flex flex-col gap-6'>
       <SubNav setView={setView} />
 
-      {view === 'steps' && (
+      {view === 'steps' && post?.data?.steps && (
         <StepsSection
           steps={post?.data?.steps ?? null}
           blogPostId={Number(id)}
