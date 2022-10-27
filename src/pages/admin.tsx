@@ -26,9 +26,10 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
         <div>loading</div>
       ) : (
         <div>
+          <div className='text-2xl font-semibold'>Posts</div>
           {blogPosts.data.map((blogPost: any) => {
             return (
-              <li key={blogPost.id}>
+              <li key={blogPost.id} className='list-none text-lg text-blue-600'>
                 <Link href={'/admin/blog-posts/' + blogPost.id}>
                   {blogPost.title}
                 </Link>

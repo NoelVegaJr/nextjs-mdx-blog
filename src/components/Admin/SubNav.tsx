@@ -9,12 +9,12 @@ const SubNav: React.FunctionComponent<ISubNavProps> = ({
 }: ISubNavProps) => {
   return (
     <div className='mt-10 flex justify-evenly overflow-hidden rounded '>
-      <button
+      {/* <button
         onClick={() => setView('newPost')}
         className='w-1/2 p-2 transition-all duration-300 hover:bg-slate-200'
       >
         New Post
-      </button>
+      </button> */}
       <button
         onClick={() => setView('card')}
         className='w-1/2 p-2 transition-all duration-300 hover:bg-slate-200'

@@ -53,20 +53,18 @@ const BlogCard: React.FunctionComponent<IBlogCardProps> = ({
                   </div>
                 </div>
                 {demoUrl && (
-                  <Link href={demoUrl}>
-                    <a
-                      href=''
-                      // target='_blank'
-                      // rel='noopener noreferrer'
-                      // onClick={(e) => {
-                      //   e.stopPropagation();
-                      // }}
-                      className='group w-fit rounded bg-slate-900 px-4 py-1 text-white hover:brightness-105'
-                    >
-                      <p>{demoUrl}</p>
-                      <div className='h-0.5 w-0 bg-white transition-all duration-500 ease-in-out group-hover:w-full' />
-                    </a>
-                  </Link>
+                  <a
+                    href={demoUrl}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className='group w-fit rounded bg-slate-900 px-4 py-1 text-white hover:brightness-105'
+                  >
+                    <p>Live Demo</p>
+                    <div className='h-0.5 w-0 bg-white transition-all duration-500 ease-in-out group-hover:w-full' />
+                  </a>
                 )}
               </div>
               <div className='md:justify-right relative mx-auto flex w-full justify-center md:w-2/4 md:justify-end'>

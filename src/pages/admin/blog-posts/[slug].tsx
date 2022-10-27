@@ -35,7 +35,7 @@ const AdminPostPage = () => {
           blogPostId={Number(id)}
         />
       )}
-      {view === 'newPost' && <NewBlogPostForm />}
+      {/* {view === 'newPost' && <NewBlogPostForm />} */}
       {view === 'card' && <BlogCard {...post.data} />}
     </div>
   );
