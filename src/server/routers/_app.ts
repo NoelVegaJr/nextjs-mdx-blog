@@ -157,7 +157,7 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(pusher);
+      console.log(input);
       const response = await pusher.trigger(input.blogPostId, 'new-message', {
         message: input.msg,
         username: input.username,
