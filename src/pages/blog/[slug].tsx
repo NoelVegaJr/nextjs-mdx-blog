@@ -68,7 +68,7 @@ const PostPage = () => {
           </ul>
         </div>
       )}
-      <Chat />
+      {id && <Chat blogPostId={id[0]} />}
     </div>
   );
 };

@@ -9,9 +9,14 @@ interface IUserProviderProps {
 interface User {
   email: string;
   image: string;
+  username: string;
 }
 
-export const UserContext = createContext({ email: '', image: '' } as User);
+export const UserContext = createContext({
+  email: '',
+  image: '',
+  username: '',
+} as User);
 const UserProvider: React.FunctionComponent<IUserProviderProps> = ({
   children,
 }) => {
@@ -23,6 +28,7 @@ const UserProvider: React.FunctionComponent<IUserProviderProps> = ({
       value={{
         email: session?.user?.email ?? '',
         image: session?.user?.image ?? '',
+        username: session?.user?.name ?? '',
       }}
     >
       {children}

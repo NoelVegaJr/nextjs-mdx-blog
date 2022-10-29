@@ -5,36 +5,42 @@ import { trpc } from '../../utils/trpc';
 import { UserContext } from '../../context/user-context';
 import Image from 'next/image';
 
-interface IChatProps {}
+interface IChatProps {
+  blogPostId: string;
+}
 
-const Chat: React.FunctionComponent<IChatProps> = (props) => {
+const Chat: React.FunctionComponent<IChatProps> = ({
+  blogPostId,
+}: IChatProps) => {
   const userCtx = useContext(UserContext);
   const newMessage = trpc.pusherMsg.useMutation();
   const [msg, setMessage] = useState('');
-  const [messages, setMessages] = useState<string[]>([]);
-  console.log(userCtx);
+  const [messages, setMessages] = useState<any[]>([]);
   useEffect(() => {
-    const pusher = new Pusher('9be33f1d0ef0e0514ba3', {
+    const pusher = new Pusher('88425a056d940139aefb', {
       cluster: 'us2',
     });
-    const channel = pusher.subscribe('chat');
+    const channel = pusher.subscribe(blogPostId);
 
-    channel.bind('chat-event', (msg: any) => {
-      setMessages((prev) => [...prev, msg.message]);
-      console.log(msg);
-      console.log(messages);
+    channel.bind('new-message', (msg: any) => {
+      setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
-      pusher.unsubscribe('chat');
+      pusher.unsubscribe(blogPostId);
     };
-  }, [messages]);
-  // console.log(messages);
+  }, [messages, blogPostId]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
     if (!msg) return;
-    newMessage.mutate({ msg });
+    newMessage.mutate({
+      msg,
+      blogPostId,
+      username: userCtx.username,
+      date: new Date().toString(),
+      avatar: userCtx.image,
+    });
     setMessage('');
   };
 
@@ -42,12 +48,11 @@ const Chat: React.FunctionComponent<IChatProps> = (props) => {
     <div className=' flex h-full w-96 flex-col border'>
       <ul className=' col flex w-full grow flex-col gap-2 p-2'>
         {messages?.map((message) => {
-          console.log(message);
           return (
             <li key={Math.random()} className='flex gap-2'>
               <div>
                 <Image
-                  src={userCtx.image}
+                  src={message.avatar}
                   alt='user avatar'
                   width='25'
                   height='25'
@@ -55,7 +60,7 @@ const Chat: React.FunctionComponent<IChatProps> = (props) => {
                 />
               </div>
               <p className='w-fit rounded-lg bg-slate-400 p-2 font-semibold'>
-                {message}
+                {message.message}
               </p>
             </li>
           );

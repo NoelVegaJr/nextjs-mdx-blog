@@ -1,9 +1,6 @@
 import { useRouter } from 'next/router';
 import { trpc } from '../../../utils/trpc';
-import NewBlogPostForm from '../../../components/Admin/NewBlogPostForm';
 import { useState } from 'react';
-import Image from 'next/image';
-
 import StepsSection from '../../../components/Admin/StepsSection';
 import BlogCard from '../../../components/Admin/BlogCard';
 import SubNav from '../../../components/Admin/SubNav';
