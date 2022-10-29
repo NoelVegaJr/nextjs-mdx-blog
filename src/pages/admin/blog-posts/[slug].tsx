@@ -13,10 +13,6 @@ const AdminPostPage = () => {
   const [view, setView] = useState('card');
 
   const { slug: id } = router.query;
-  if (!id) {
-    router.push('/');
-    return;
-  }
 
   const post = trpc.getBlogPostsById.useQuery({ id: Number(id) });
   console.log(post.data);
