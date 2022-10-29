@@ -4,6 +4,7 @@ import Pusher from 'pusher-js';
 import { trpc } from '../../utils/trpc';
 import { UserContext } from '../../context/user-context';
 import Image from 'next/image';
+import { pusherClient } from '../../utils/pusher';
 
 interface IChatProps {
   blogPostId: string;
@@ -17,19 +18,17 @@ const Chat: React.FunctionComponent<IChatProps> = ({
   const [msg, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([]);
   useEffect(() => {
-    const pusher = new Pusher('99e512a0e34c2dc7612d', {
-      cluster: 'us2',
-    });
-    const channel = pusher.subscribe(blogPostId);
+    const channel = pusherClient.subscribe(blogPostId);
 
     channel.bind('new-message', (msg: any) => {
+      console.log(msg);
       setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
-      pusher.unsubscribe(blogPostId);
+      pusherClient.unsubscribe(blogPostId);
     };
-  }, [messages, blogPostId]);
+  }, [blogPostId]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();

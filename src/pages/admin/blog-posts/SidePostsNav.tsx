@@ -23,7 +23,7 @@ const SidePostsNav: React.FunctionComponent<ISidePostsNavProps> = ({
   }, [parent]);
 
   return (
-    <div className='border-right   h-full w-52 min-w-fit border bg-white'>
+    <div className='border-right   h-full w-80 min-w-fit border bg-white'>
       <button
         onClick={() => isCreatingNewBlogPost(true)}
         className=' w-full  rounded p-2 px-2 text-left text-lg font-semibold'

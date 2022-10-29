@@ -1,5 +1,6 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 interface INavProps {}
 
@@ -10,13 +11,31 @@ const Nav: React.FC<INavProps> = (props) => {
   const { data: session } = useSession();
   console.log(session);
   return (
-    <nav className=' flex h-20 w-full items-center justify-between border-b border-b-gray-400 bg-white p-8'>
+    <nav className=' fixed z-50 flex h-20 w-full items-center justify-between border-b border-b-gray-400 bg-slate-800 p-8 text-white'>
       <div className='flex items-center'>
+        <AnchorLink
+          href='#landing'
+          className={`${logoStyles}  mr-12 text-3xl font-semibold`}
+          offset='150'
+        >
+          Code Fork
+        </AnchorLink>
+        <AnchorLink
+          href='#product'
+          className={`${logoStyles}  mr-12 text-lg font-semibold`}
+          offset='75'
+        >
+          Product
+        </AnchorLink>
         <Link href='/'>
-          <a className={`${logoStyles}  mr-12 text-3xl font-bold`}>Code Fork</a>
+          <a className={`${logoStyles}  mr-12 text-lg font-semibold`}>
+            Features
+          </a>
         </Link>
-        <Link href='/bio'>
-          <a className={`${baseLinkStyles} ${linkStyles}`}>Bio</a>
+        <Link href='/'>
+          <a className={`${logoStyles}  mr-12 text-lg font-semibold`}>
+            Company
+          </a>
         </Link>
       </div>
       <div className='flex items-center gap-4 text-xl'>
