@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { trpc } from '../utils/trpc';
 import SidePostsNav from './admin/blog-posts/SidePostsNav';
-import BlogPost from '../components/BlogPost/BlogPost';
 import { IBlogPost } from '../types/BlogPost';
 import { UserContext } from '../context/user-context';
 import EdittableBlogPost from '../components/BlogPost/EdittableBlogPost';

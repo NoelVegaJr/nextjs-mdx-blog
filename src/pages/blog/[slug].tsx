@@ -11,10 +11,6 @@ const PostPage = () => {
     id: Number(id),
   });
 
-  if (!id) {
-    router.push('/');
-    return;
-  }
   const post = trpc.getBlogPostsById.useQuery({ id: Number(id) });
 
   if (!steps.data || steps.isLoading || steps.error) {
