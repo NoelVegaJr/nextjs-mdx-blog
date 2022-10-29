@@ -19,13 +19,13 @@ const SubNav: React.FunctionComponent<ISubNavProps> = ({
         onClick={() => setView('card')}
         className='w-1/2 p-2 transition-all duration-300 hover:bg-slate-200'
       >
-        Card
+        Card Editor
       </button>
       <button
         onClick={() => setView('steps')}
         className='w-1/2 p-2 transition-all duration-300 hover:bg-slate-200'
       >
-        Steps
+        Steps Editor
       </button>
     </div>
   );

@@ -6,6 +6,7 @@ import { Layout } from '../components/Layout';
 import type { AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
 import { SessionProvider } from 'next-auth/react';
+import UserProvider from '../context/user-context';
 
 const MyApp: AppType = ({
   Component,
@@ -13,9 +14,11 @@ const MyApp: AppType = ({
 }: any) => {
   return (
     <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <UserProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </UserProvider>
     </SessionProvider>
   );
 };

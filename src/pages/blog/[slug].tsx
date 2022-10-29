@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { trpc } from '../../utils/trpc';
 import Image from 'next/image';
 import ViewerStep from '../../components/Admin/Step/ViewerStep';
+import Chat from './chat';
 
 const PostPage = () => {
   const router = useRouter();
@@ -14,22 +15,16 @@ const PostPage = () => {
     router.push('/');
     return;
   }
-  console.log(Number(id));
   const post = trpc.getBlogPostsById.useQuery({ id: Number(id) });
-
-  console.log('rendering post page');
-  console.log(id);
 
   if (!steps.data || steps.isLoading || steps.error) {
     return <div>Loading</div>;
   }
 
-  console.log(post.data);
-  console.log(post.data?.user?.image);
   return (
-    <div className=' container mx-auto max-w-4xl'>
+    <div className='  flex h-full '>
       {post.data && (
-        <>
+        <div className='h-full grow overflow-y-auto   px-12'>
           <header className='mb-12 mt-6'>
             <div className='mb-2 text-center'>
               <h2 className=' text-7xl font-bold text-blue-600'>
@@ -75,8 +70,9 @@ const PostPage = () => {
               );
             })}
           </ul>
-        </>
+        </div>
       )}
+      <Chat />
     </div>
   );
 };

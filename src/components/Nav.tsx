@@ -10,7 +10,7 @@ const Nav: React.FC<INavProps> = (props) => {
   const { data: session } = useSession();
   console.log(session);
   return (
-    <nav className=' flex items-center justify-between border-b border-b-gray-400 p-6'>
+    <nav className=' flex h-20 w-full items-center justify-between border-b border-b-gray-400 bg-white p-8'>
       <div className='flex items-center'>
         <Link href='/'>
           <a className={`${logoStyles}  mr-12 text-3xl font-bold`}>Code Fork</a>

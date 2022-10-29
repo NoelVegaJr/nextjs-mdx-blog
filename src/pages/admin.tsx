@@ -1,44 +1,48 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { trpc } from '../utils/trpc';
-import Link from 'next/link';
-
-import NewBlogPostForm from '../components/Admin/NewBlogPostForm';
+import SidePostsNav from './admin/blog-posts/SidePostsNav';
+import BlogPost from '../components/BlogPost/BlogPost';
+import { IBlogPost } from '../types/BlogPost';
+import { UserContext } from '../context/user-context';
+import EdittableBlogPost from '../components/BlogPost/EdittableBlogPost';
 
 interface IAdminProps {}
 
 const Admin: React.FunctionComponent<IAdminProps> = (props) => {
-  const [creatingNewBlogPost, isCreatingNewBlogPost] = useState(false);
-  const blogPosts = trpc.getBlogPosts.useQuery();
+  const userCtx = useContext(UserContext);
+  const posts = trpc.getBlogPostsByUser.useQuery({ email: userCtx.email });
+  const [postId, setPostId] = useState<number>();
+  const [viewingPost, viewingPostSet] = useState<IBlogPost | null>(null);
+  useEffect(() => {
+    const chosenPost = posts.data?.find((post) => post.id === postId);
+    if (chosenPost) {
+      viewingPostSet(chosenPost);
+    }
 
+    if (!postId && posts.data) {
+      setPostId(posts.data[0]?.id);
+    }
+  }, [postId, posts.data]);
+
+  useEffect(() => {});
+
+  posts?.data?.map((post) => console.log(post));
+
+  if (!posts.data) {
+    return <div>Loading</div>;
+  }
   return (
-    <>
-      {!creatingNewBlogPost ? (
-        <button
-          onClick={() => isCreatingNewBlogPost(true)}
-          className='w-full rounded bg-slate-800 p-4 text-lg font-semibold text-white '
-        >
-          Create a new Blog Post
-        </button>
-      ) : (
-        <NewBlogPostForm />
-      )}
-      {!blogPosts.data ? (
-        <div>loading</div>
-      ) : (
-        <div>
-          <div className='text-2xl font-semibold'>Posts</div>
-          {blogPosts.data.map((blogPost: any) => {
-            return (
-              <li key={blogPost.id} className='list-none text-lg text-blue-600'>
-                <Link href={'/admin/blog-posts/' + blogPost.id}>
-                  {blogPost.title}
-                </Link>
-              </li>
-            );
-          })}
-        </div>
-      )}
-    </>
+    <div className=' relative flex h-full w-full '>
+      <SidePostsNav posts={posts.data} setPostId={setPostId} />
+
+      {viewingPost && <EdittableBlogPost {...viewingPost} />}
+      {/* 
+        <button className=' w-full bg-green-600  p-4 text-center text-xl font-bold text-white'>
+          Add Step
+        </button> */}
+
+      {/* <div className='h-52 w-full border'></div> */}
+    </div>
   );
 };
 

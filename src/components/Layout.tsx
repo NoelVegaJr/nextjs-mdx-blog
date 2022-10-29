@@ -8,9 +8,12 @@ export interface ILayoutProps {
 export function Layout({ children }: ILayoutProps) {
   return (
     <>
-      <div className='h-screen w-screen mx-auto sm:px-12'>
+      <div className=' flex h-screen w-full flex-col'>
         <Nav />
-        {children}
+
+        <div className='min-h-0 grow '>
+          <div className='h-full'>{children}</div>
+        </div>
       </div>
     </>
   );

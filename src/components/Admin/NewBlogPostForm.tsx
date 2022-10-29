@@ -7,11 +7,13 @@ import uploadImage from '../../utils/imageUpload';
 import { trpc } from '../../utils/trpc';
 import Input from '../Input';
 
-interface INewBlogPostFormProps {}
+interface INewBlogPostFormProps {
+  onClose: () => void;
+}
 
-const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = (
-  props
-) => {
+const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = ({
+  onClose,
+}) => {
   const createBlogPost = trpc.createBlogPost.useMutation();
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
@@ -46,7 +48,33 @@ const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = (
   };
 
   return (
-    <div className='mt-10 rounded border border-slate-400 p-6' ref={testRef}>
+    <div
+      className='mt-10 rounded border border-slate-400 bg-white p-6'
+      ref={testRef}
+    >
+      <div className='flex justify-between'>
+        <p>New Blog Post</p>
+        <button
+          type='button'
+          className='rounded-full bg-red-600 p-2 text-lg font-semibold text-white transition-all duration-300 hover:bg-red-700 '
+          onClick={() => onClose()}
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={2}
+            stroke='currentColor'
+            className='h-3 w-3'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M6 18L18 6M6 6l12 12'
+            />
+          </svg>
+        </button>
+      </div>
       <form onSubmit={sumbitHandler} className='mt-8 flex flex-col gap-4'>
         <Input
           id={'title'}
@@ -97,13 +125,6 @@ const NewBlogPostForm: React.FunctionComponent<INewBlogPostFormProps> = (
           className='rounded bg-green-600 p-2 text-lg font-semibold text-white transition-all duration-300 hover:bg-green-700 '
         >
           Submit
-        </button>
-        <button
-          type='button'
-          className='rounded bg-red-600 p-2 text-lg font-semibold text-white transition-all duration-300 hover:bg-red-700 '
-          onClick={() => {}}
-        >
-          Cancel
         </button>
       </form>
     </div>

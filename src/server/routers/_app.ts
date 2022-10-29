@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 import { PrismaClient } from '@prisma/client';
+import Pusher from 'pusher';
+import Input from '../../components/Input';
 
 const prisma: PrismaClient = new PrismaClient();
 
@@ -29,6 +31,38 @@ export const appRouter = router({
     const blogPosts = await prisma.blogPost.findMany();
     return blogPosts;
   }),
+  getBlogPostsByUser: publicProcedure
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: input.email,
+          },
+          select: {
+            blogPosts: {
+              include: {
+                steps: {
+                  include: {
+                    bullets: true,
+                  },
+                },
+                user: true,
+              },
+            },
+          },
+        });
+
+        return user?.blogPosts ?? [];
+      } catch (error) {
+        console.log(error);
+        return [];
+      }
+    }),
   getBlogPostsById: publicProcedure
     .input(
       z.object({
@@ -111,6 +145,23 @@ export const appRouter = router({
 
       console.log('STEPS: ', steps);
       return steps;
+    }),
+  pusherMsg: publicProcedure
+    .input(z.object({ msg: z.string() }))
+    .mutation(async ({ input }) => {
+      const pusher = new Pusher({
+        appId: '1498711',
+        key: '9be33f1d0ef0e0514ba3',
+        secret: 'f896b95080067bd8ffa9',
+        cluster: 'us2',
+        useTLS: true,
+      });
+
+      const response = await pusher.trigger('chat', 'chat-event', {
+        message: input.msg,
+      });
+      console.log(input.msg);
+      return response;
     }),
 });
 
