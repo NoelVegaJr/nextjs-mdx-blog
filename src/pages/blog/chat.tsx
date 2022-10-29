@@ -17,7 +17,7 @@ const Chat: React.FunctionComponent<IChatProps> = ({
   const [msg, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([]);
   useEffect(() => {
-    const pusher = new Pusher('88425a056d940139aefb', {
+    const pusher = new Pusher('99e512a0e34c2dc7612d', {
       cluster: 'us2',
     });
     const channel = pusher.subscribe(blogPostId);
