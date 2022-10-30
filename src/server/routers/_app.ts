@@ -184,7 +184,8 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization: 'Bearer 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',
+            Authorization:
+              'Bearer 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',
           },
         }
       );
@@ -206,7 +207,8 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization: 'Bearer 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',
+            Authorization:
+              'Bearer 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',
           },
         }
       );
@@ -223,7 +225,8 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization: 'Bearer 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',
+            Authorization:
+              'Bearer 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',
           },
         }
       );
@@ -240,7 +243,8 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization: 'Bearer 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',
+            Authorization:
+              'Bearer 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',
           },
         }
       );
