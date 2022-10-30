@@ -13,11 +13,13 @@ const Nav: React.FC<INavProps> = (props) => {
   return (
     <nav className=' fixed z-50 flex h-20 w-full items-center justify-between border-b border-b-gray-400 bg-slate-800 p-8 text-white'>
       <div className='flex items-center'>
-        <Link href='/'>
-          <a className={`${logoStyles}  mr-12 text-3xl font-semibold`}>
-            Code Fork
-          </a>
-        </Link>
+        <AnchorLink
+          href='#landing'
+          className={`${logoStyles}  mr-12 text-3xl font-semibold`}
+          offset='150'
+        >
+          Code Fork
+        </AnchorLink>
         <AnchorLink
           href='#product'
           className={`${logoStyles}  mr-12 text-lg font-semibold`}
@@ -32,11 +34,11 @@ const Nav: React.FC<INavProps> = (props) => {
         >
           Features
         </AnchorLink>
-        <Link href='/'>
+        {/* <Link href='/'>
           <a className={`${logoStyles}  mr-12 text-lg font-semibold`}>
             Company
           </a>
-        </Link>
+        </Link> */}
         <Link href='/posts'>
           <a href='#' className={`${logoStyles}  mr-12 text-lg font-semibold`}>
             Demo
