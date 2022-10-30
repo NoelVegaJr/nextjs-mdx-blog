@@ -135,8 +135,7 @@ const Home = () => {
             Teams large and small rely on Code Fork
           </h3>
           <p className='text-center text-xl font-semibold'>
-            Code Fork allows you to scale up your application more easily with
-            documenation{' '}
+            Scale up your application with effective documenation
           </p>
           <div className='flex w-full justify-center gap-8'>
             <button className='rounded bg-slate-700 py-4 px-6 font-semibold uppercase text-white'>
