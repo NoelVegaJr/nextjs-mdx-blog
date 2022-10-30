@@ -184,8 +184,7 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization:
-              'Bearer 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',
+            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
           },
         }
       );
@@ -207,8 +206,7 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization:
-              'Bearer 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',
+            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
           },
         }
       );
@@ -225,8 +223,7 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization:
-              'Bearer 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',
+            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
           },
         }
       );
@@ -243,8 +240,7 @@ export const appRouter = router({
         {
           method: 'GET',
           headers: {
-            Authorization:
-              'Bearer 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',
+            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
           },
         }
       );
