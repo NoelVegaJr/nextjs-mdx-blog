@@ -34,8 +34,6 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
 
   const closeTabHandler = (index: number) => {
     const newTabs = [...tabs.filter((tab) => tab.index !== index)];
-    console.log(newTabs);
-    console.log(newTabs[newTabs.length - 1]);
     setTabs(newTabs);
     setOpenTab(newTabs[newTabs.length - 1]);
   };
@@ -51,7 +49,6 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     const newTab = { type: 'dir', index: tabIndex, name: repo };
     const newTabs = [...tabs, newTab];
     setTabs(newTabs);
-    console.log('SETTING NEW TAB: ', newTab);
     setOpenTab(newTab);
   };
 
@@ -63,10 +60,7 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     path: string;
   }) => {
     const cleanUrl = file.url.replace('?ref=main', '');
-    console.log('CLEANED URL', cleanUrl);
     const files = tabs.filter((tab) => tab.type === 'file');
-    console.log(files);
-    console.log(files.map((file) => file.data.url));
     if (files.map((file) => file.data.url).includes(cleanUrl)) return;
 
     setTabIndex((prev) => prev + 1);
@@ -103,7 +97,11 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
   if (repo.error) {
     return <div>error</div>;
   }
-  console.log('OPEN TAB: ', openTab);
+
+  if (openTab?.type === 'file') {
+    console.log('GET ', openTab.data.url);
+  }
+
   return (
     <div className='  flex h-full w-full '>
       <AdminSideNav
