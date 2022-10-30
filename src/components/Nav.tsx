@@ -27,11 +27,13 @@ const Nav: React.FC<INavProps> = (props) => {
         >
           Product
         </AnchorLink>
-        <Link href='/'>
-          <a className={`${logoStyles}  mr-12 text-lg font-semibold`}>
-            Features
-          </a>
-        </Link>
+        <AnchorLink
+          href='#features'
+          className={`${logoStyles}  mr-12 text-lg font-semibold`}
+          offset='80'
+        >
+          Features
+        </AnchorLink>
         <Link href='/'>
           <a className={`${logoStyles}  mr-12 text-lg font-semibold`}>
             Company
