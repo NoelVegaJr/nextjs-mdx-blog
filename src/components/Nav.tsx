@@ -28,7 +28,7 @@ const Nav: React.FC<INavProps> = (props) => {
         <AnchorLink
           href='#features'
           className={`${logoStyles}  mr-12 text-lg font-semibold`}
-          offset='80'
+          offset='10'
         >
           Features
         </AnchorLink>

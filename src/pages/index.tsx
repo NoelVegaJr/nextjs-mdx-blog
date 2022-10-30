@@ -80,31 +80,57 @@ const Home = () => {
           linkUrl='/'
         />
       </section>
-      <section id='features' className='py-16'>
+      <section id='features' className='py-32'>
         <div>
-          <h3 className='mb-12 text-center text-5xl font-semibold'>Features</h3>
+          {/* <h3 className='mb-12 text-center text-5xl font-semibold'>Features</h3> */}
           <div className=' justify flex justify-evenly gap-6 px-6'>
-            <div className='h-96 w-1/3 border bg-cyan-300'>
-              <p className='text-xl font-semibold'>
+            <div className='flex h-96 w-1/3 flex-col gap-6  p-6'>
+              <h5 className='text-center text-2xl font-semibold'>
+                Create Documents
+              </h5>
+              <div className='flex justify-center'>
+                <Image src='/working.png' alt='' width='200' height='200' />
+              </div>
+              <p className='text-left'>
                 After linking your Git Hub repo, you can begin to create
                 documents for various code sections. Within each document you
                 can create steps and bullet points to highlight and describe
                 what a section of code does.
               </p>
             </div>
-            <div className='h-96 w-1/3 border bg-cyan-300'>
-              With our document editor you can edit documents and commit
-              changes. The doc master can then review and commit changes. Code
-              Fork aims to make documentation a collaborative effort. While
-              viewing or editing a document you can chat with others who are
-              viewing/editing the same document.
+            <div className='flex h-96 w-1/3 flex-col gap-6  p-6'>
+              <h5 className='text-center text-2xl font-semibold'>
+                Edit and Review changes
+              </h5>
+              <div className='flex justify-center'>
+                <Image src='/searching.png' alt='' width='200' height='200' />
+              </div>
+              <p className='text-left'>
+                With our document editor you can edit documents and commit
+                changes. The doc master can then review and commit changes.
+              </p>
             </div>
-            <div className='h-96 w-1/3 border bg-cyan-300'></div>
+            <div className='flex h-96 w-1/3 flex-col gap-6  p-6'>
+              <h5 className='text-center text-2xl font-semibold'>
+                Collaboration
+              </h5>
+              <div className='flex justify-center'>
+                <Image
+                  src='/collaboration.png'
+                  alt=''
+                  width='200'
+                  height='200'
+                />
+              </div>
+              <p className='text-left'>
+                Code Fork aims to make documentation a collaborative effort.
+                While viewing or editing a document you can chat with others who
+                are viewing/editing the same document.
+              </p>
+            </div>
           </div>
         </div>
-      </section>
-      <section id='' className=''>
-        <div className='flex flex-col gap-6 pb-32'>
+        <div className='mt-32 flex flex-col gap-6'>
           <h3 className='text-center text-5xl font-bold text-slate-700'>
             Teams large and small rely on Code Fork
           </h3>
@@ -121,9 +147,11 @@ const Home = () => {
             </button>
           </div>
         </div>
+      </section>
+      <section id='' className=''>
         <div className='flex flex-col gap-12 bg-slate-900 py-32'>
           <h3 className=' text-center text-5xl font-bold text-white'>
-            Welcome to encylopedia of code
+            Welcome to the encylopedia of code
           </h3>
           <div className='flex justify-center gap-8'>
             <button className='rounded bg-slate-50 py-4 px-6 font-semibold text-slate-900'>
