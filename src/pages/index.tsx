@@ -18,18 +18,21 @@ const Home = () => {
         <div className='flex h-full '>
           <div className='grid h-full w-1/2 place-items-center '>
             <div>
-              <h1 className=' mb-6 text-5xl font-bold text-black drop-shadow-2xl'>
-                A <span className='text-blue-500'>fully featured</span>{' '}
+              <h1 className=' mb-6 text-5xl font-bold text-black  drop-shadow-2xl'>
+                A{' '}
+                <span className='bg-gradient-to-r from-blue-500 to-cyan-600 bg-clip-text text-transparent'>
+                  fully featured
+                </span>{' '}
                 documentation platform for your code.
               </h1>
               <p className='mb-12 text-2xl'>
                 Documenting your work made open source.
               </p>
               <div className='flex gap-4'>
-                <button className='rounded bg-cyan-600 py-3 px-6 text-xl font-semibold text-white saturate-150 hover:saturate-100'>
+                <button className='rounded bg-blue-500 bg-gradient-to-r from-blue-500 to-cyan-600 py-3 px-6 text-xl font-semibold text-white saturate-150 transition-all duration-300 hover:scale-105 hover:from-blue-500 '>
                   Get started
                 </button>
-                <button className='flex items-center  gap-2 rounded border py-3 px-6 text-xl font-semibold text-black hover:bg-gray-50'>
+                <button className='flex items-center  gap-2 rounded border py-3 px-6 text-xl font-semibold text-black transition-all duration-300 hover:scale-105 hover:bg-gray-50'>
                   <Image
                     src='/GitHub-Mark-32px.png'
                     alt='GitHub logo'
