@@ -96,6 +96,10 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     setOpenTab(tab);
   };
 
+  if (userRepos.isLoading) {
+    return <div>Loading</div>;
+  }
+
   if (repo.error) {
     return <div>error</div>;
   }
