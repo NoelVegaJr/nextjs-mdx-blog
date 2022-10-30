@@ -185,7 +185,7 @@ export const appRouter = router({
           method: 'GET',
           headers: {
             Authorization:
-              'Bearer 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',
+              'Bearer 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',
           },
         }
       );
@@ -201,17 +201,19 @@ export const appRouter = router({
     .input(z.object({ username: z.string() }))
     .query(async ({ input }) => {
       const { username } = input;
+      console.log(username);
       const response = await fetch(
         `https://api.github.com/users/${username}/repos`,
         {
           method: 'GET',
           headers: {
             Authorization:
-              'Bearer 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',
+              'Bearer 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',
           },
         }
       );
       const repos = await response.json();
+      console.log(repos);
       return repos;
     }),
   getRepo: publicProcedure
@@ -224,7 +226,7 @@ export const appRouter = router({
           method: 'GET',
           headers: {
             Authorization:
-              'Bearer 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',
+              'Bearer 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',
           },
         }
       );
@@ -242,7 +244,7 @@ export const appRouter = router({
           method: 'GET',
           headers: {
             Authorization:
-              'Bearer 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',
+              'Bearer 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',
           },
         }
       );

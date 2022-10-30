@@ -8,95 +8,125 @@ import EdittableBlogPost from '../components/BlogPost/EdittableBlogPost';
 import Repo from '../components/Admin/Repo/Repo';
 import { REPL_MODE_SLOPPY } from 'repl';
 import RepoContent from '../components/Admin/Repo/RepoContent';
+import Tab from '../components/Admin/Tabs';
+import path from 'path';
 
 interface IAdminProps {}
 
-function Accordion() {
-  const [isOpen, setOpen] = useState(false);
-
-  return (
-    <motion.div
-      layout
-      style={{ height: isOpen ? '100px' : '500px' }}
-      onClick={() => setOpen(!isOpen)}
-    />
-  );
-}
-
 const Admin: React.FunctionComponent<IAdminProps> = (props) => {
-  const [tabs, setTabs] = useState<string[]>([]);
   const userRepos = trpc.getUserRepos.useQuery({ username: 'NoelVegaJr' });
-  const [selectedRepo, setSelectedRepo] = useState('');
-  const [file, setFile] = useState('');
+  const [tabIndex, setTabIndex] = useState(0);
+  const [openRepo, setOpenRepo] = useState('');
+  const [currentPath, setCurrentPath] = useState<string>('');
+  const [openFile, setOpenFile] = useState<{
+    name: string;
+    url: string;
+    size: number;
+    path: string;
+  }>();
+  const [tabs, setTabs] = useState<any[]>([]);
+  const [openTab, setOpenTab] = useState<any>();
   const [selectedRootTab, setSelectedRootTab] = useState('');
-  const [selectedTab, setSelectedTab] = useState('');
   const repo = trpc.getRepo.useQuery({
     owner: 'NoelVegaJr',
-    repo: selectedRepo,
+    repo: openRepo,
   });
-  const [path, setPath] = useState<string>('');
 
-  useEffect(() => {
-    setSelectedRootTab(selectedRepo);
-  }, [selectedRepo]);
+  const closeTabHandler = (index: number) => {
+    const newTabs = [...tabs.filter((tab) => tab.index !== index)];
+    console.log(newTabs);
+    console.log(newTabs[newTabs.length - 1]);
+    setTabs(newTabs);
+    setOpenTab(newTabs[newTabs.length - 1]);
+  };
 
-  useEffect(() => {
-    if (file) {
-      setTabs((prev) => [...prev, file]);
-      setSelectedTab(file);
-    }
-  }, [file]);
+  const openRepoHandler = (repo: string) => {
+    const alreadyOpen = tabs.filter(
+      (tab) => tab.type === 'dir' && tab.name === repo
+    );
+    if (alreadyOpen.length > 0) return;
 
-  if (!repo.data) {
-    return <div>Loading...</div>;
-  }
+    setTabIndex((prev) => prev + 1);
+    setOpenRepo(repo);
+    const newTab = { type: 'dir', index: tabIndex, name: repo };
+    const newTabs = [...tabs, newTab];
+    setTabs(newTabs);
+    console.log('SETTING NEW TAB: ', newTab);
+    setOpenTab(newTab);
+  };
+
+  const openFileHandler = (file: {
+    name: string;
+    content: string;
+    url: string;
+    size: number;
+    path: string;
+  }) => {
+    const cleanUrl = file.url.replace('?ref=main', '');
+    console.log('CLEANED URL', cleanUrl);
+    const files = tabs.filter((tab) => tab.type === 'file');
+    console.log(files);
+    console.log(files.map((file) => file.data.url));
+    if (files.map((file) => file.data.url).includes(cleanUrl)) return;
+
+    setTabIndex((prev) => prev + 1);
+
+    setOpenFile((prev) => {
+      return {
+        name: file.name,
+        url: cleanUrl,
+        size: file.size,
+        path: file.path,
+      };
+    });
+
+    const newTab = {
+      type: 'file',
+      index: tabIndex,
+      name: file.name,
+      data: { ...file, url: cleanUrl },
+    };
+    const newTabs = [...tabs, newTab];
+    setTabs(newTabs);
+    setOpenTab(newTab);
+  };
+
+  const openTabHandler = (index: number) => {
+    const tab = tabs.find((tab) => tab.index === index);
+    setOpenTab(tab);
+  };
+
   if (repo.error) {
     return <div>error</div>;
   }
-  console.log(selectedTab);
+  console.log('OPEN TAB: ', openTab);
   return (
     <div className='  flex h-full w-full '>
       <AdminSideNav
         repos={userRepos.data}
-        setRepo={setSelectedRepo}
-        setPath={setPath}
-        activeRepo={selectedRepo}
+        openRepo={openRepoHandler}
+        setPath={setCurrentPath}
+        activeRepo={openRepo}
       />
       <div className=' w-full'>
         <nav className='p-2'>
           <ul className='flex'>
-            {tabs.map((item) => (
-              <div key={item} className=''>
-                <li
-                  className={`${
-                    selectedTab === selectedTab && 'bg-slate-200'
-                  } flex w-fit cursor-pointer gap-2 rounded-t border border-t border-l border-r border-slate-400 py-2 px-4 font-semibold`}
-                  onClick={() => setSelectedTab(item)}
-                >
-                  <p>{`${item}`}</p>
-                  <div
-                    className='self-start text-red-700'
-                    onClick={() => {
-                      setTabs((prev) => [
-                        ...tabs.filter((tab) => tab !== item),
-                      ]);
-                    }}
-                  >
-                    x
-                  </div>
-                </li>
-                {item === selectedTab || tabs.length === 1 ? (
-                  <motion.div
-                    className={`h-0.5 w-full bg-orange-500`}
-                    layoutId='underline'
-                  />
-                ) : null}
+            {tabs?.map((tab) => (
+              <div key={tab.index} className=''>
+                <Tab
+                  type={tab.type ? tab.type : 'dir'}
+                  index={tab.index}
+                  name={tab.name}
+                  isOpen={tab.index === openTab.index}
+                  open={openTabHandler}
+                  close={closeTabHandler}
+                />
               </div>
             ))}
           </ul>
         </nav>
         <div className='mx-auto mt-8 flex w-full max-w-3xl grow flex-col gap-8'>
-          <h2 className='text-3xl'>{selectedRepo}</h2>
+          <h2 className='text-3xl'>{openRepo}</h2>
           <AnimatePresence mode='wait'>
             <motion.div
               key={selectedRootTab ? selectedRootTab : 'empty'}
@@ -105,19 +135,19 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
               exit={{ y: -10, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              {!path ? (
+              {!currentPath ? (
                 <Repo
-                  name={selectedRepo}
-                  setPath={setPath}
-                  path={path}
-                  setFile={setFile}
+                  name={openRepo}
+                  setPath={setCurrentPath}
+                  path={currentPath}
+                  openFile={openFileHandler}
                 />
               ) : (
                 <RepoContent
-                  repoName={selectedRepo}
-                  path={path}
-                  setPath={setPath}
-                  setFile={setFile}
+                  openFile={openFileHandler}
+                  repoName={openRepo}
+                  path={currentPath}
+                  setPath={setCurrentPath}
                 />
               )}
             </motion.div>

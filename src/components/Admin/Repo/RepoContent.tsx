@@ -5,14 +5,14 @@ interface IRepoProps {
   path: string;
   repoName: string;
   setPath: Dispatch<SetStateAction<string>>;
-  setFile: Dispatch<SetStateAction<string>>;
+  openFile: (file: any) => void;
 }
 
 const RepoContent: React.FunctionComponent<IRepoProps> = ({
   path,
   repoName,
   setPath,
-  setFile,
+  openFile,
 }: IRepoProps) => {
   console.log('REPO: ', repoName);
   console.log('PATH: ', path);
@@ -22,12 +22,11 @@ const RepoContent: React.FunctionComponent<IRepoProps> = ({
     path: path,
   });
 
-  if (!repo.data) {
-    return <div>Loading...</div>;
-  }
   if (repo.error) {
     return <div>error</div>;
   }
+
+  console.log(repo.data);
   return (
     <div className=' rounded-lg '>
       <p className='mb-4 text-xl font-semibold text-slate-500 '>
@@ -50,7 +49,6 @@ const RepoContent: React.FunctionComponent<IRepoProps> = ({
                     .split('/')
                     .slice(0, index + 1)
                     .join('/');
-                  console.log(clickedBreadCrumbPath);
                   setPath(clickedBreadCrumbPath);
                 }}
               >
@@ -66,6 +64,7 @@ const RepoContent: React.FunctionComponent<IRepoProps> = ({
         <div className='bg-slate-100 p-2'>Latest activity here</div>
         <ul>
           {path &&
+            repo.data &&
             repo.data?.message !== 'This repository is empty.' &&
             repo?.data?.map((item: any, index: number) => {
               return (
@@ -73,11 +72,15 @@ const RepoContent: React.FunctionComponent<IRepoProps> = ({
                   key={index}
                   className='flex cursor-pointer list-none items-center gap-2 border-y border-slate-200 px-3 py-2 hover:bg-slate-50'
                   onClick={() => {
-                    console.log('Clicked Item: ', item);
                     if (item.type === 'dir') {
                       setPath((prev) => prev + '/' + item.name);
-                    } else {
-                      setFile(item.name);
+                    } else if (item.type === 'file') {
+                      console.log(item);
+                      // setPath((prev) => prev + '/' + item.name);
+
+                      openFile(item);
+
+                      console.log(item);
                     }
                   }}
                 >

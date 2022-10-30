@@ -26,7 +26,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       method: 'GET',
       headers: {
         Authorization:
-          'Bearer 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',
+          'Bearer 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',
       },
     }
   );

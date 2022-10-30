@@ -11,13 +11,13 @@ import { UserContext } from '../../context/user-context';
 interface ISidePostsNavProps {
   repos: any;
   activeRepo: string;
-  setRepo: Dispatch<SetStateAction<string>>;
+  openRepo: (repo: string) => void;
   setPath: Dispatch<SetStateAction<string>>;
 }
 
 const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
   repos,
-  setRepo,
+  openRepo,
   setPath,
   activeRepo,
 }) => {
@@ -46,7 +46,7 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
             ddReposSet(!ddRepos);
           }}
         >
-          <p className=''>Repos</p>
+          <p className='text-black'>Repos</p>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -69,17 +69,17 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
               <li
                 key={index}
                 className={`cursor-pointer list-none p-1 px-2 text-lg ${
-                  repo.name === activeRepo && 'text-cyan-600'
+                  repo.name === activeRepo && 'text-blue-400'
                 }`}
                 onClick={() => {
-                  setRepo(repo.name);
+                  openRepo(repo.name);
                   setPath('');
                 }}
               >
                 <p
                   className={`${
                     repo.name === activeRepo
-                      ? 'text-cyan-600'
+                      ? 'text-blue-600'
                       : 'text-slate-500'
                   } font-semibold`}
                 >

@@ -5,20 +5,17 @@ interface IRepoProps {
   name: string;
   path: string;
   setPath: Dispatch<SetStateAction<string>>;
-  setFile: Dispatch<SetStateAction<string>>;
+  openFile: (file: any) => void;
 }
 
 const Repo: React.FunctionComponent<IRepoProps> = ({
   name,
   path,
   setPath,
-  setFile,
+  openFile,
 }: IRepoProps) => {
   const repo = trpc.getRepo.useQuery({ owner: 'NoelVegaJr', repo: name });
 
-  if (!repo.data) {
-    return <div>Loading...</div>;
-  }
   if (repo.error) {
     return <div>error</div>;
   }
@@ -28,6 +25,7 @@ const Repo: React.FunctionComponent<IRepoProps> = ({
         <div className='bg-slate-100 p-2'>Latest activity here</div>
 
         {name &&
+          repo.data &&
           repo.data?.message !== 'This repository is empty.' &&
           repo?.data?.map((item: any, index: number) => {
             return (
@@ -35,13 +33,11 @@ const Repo: React.FunctionComponent<IRepoProps> = ({
                 key={index}
                 className='flex cursor-pointer list-none items-center gap-2 border-y border-slate-200 px-3 py-2 hover:bg-slate-100'
                 onClick={() => {
-                  console.log('Clicked Item: ', item);
                   if (item.type === 'dir') {
-                    console.log('SETTING PATH: ', item.name);
                     setPath((prev) => prev + '/' + item.name);
-                  } else {
-                    console.log('This is a file');
-                    setFile(item.name);
+                  } else if (item.type === 'file') {
+                    console.log(item);
+                    openFile(item);
                   }
                 }}
               >
