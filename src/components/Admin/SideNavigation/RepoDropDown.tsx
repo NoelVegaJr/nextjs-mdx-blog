@@ -4,13 +4,9 @@ import autoAnimate from '@formkit/auto-animate';
 
 interface IStepDropDownProps {
   title: string;
-  steps: any;
 }
 
-const StepDropDown: React.FunctionComponent<IStepDropDownProps> = ({
-  title,
-  steps,
-}) => {
+const RepoDD: React.FunctionComponent<IStepDropDownProps> = ({ title }) => {
   const [ddSteps, ddStepsSet] = useState<boolean>(false);
   const parent = useRef(null);
 
@@ -37,7 +33,7 @@ const StepDropDown: React.FunctionComponent<IStepDropDownProps> = ({
           />
         </svg>
       </div>
-      {ddSteps && (
+      {/* {ddSteps && (
         <ul className={`  pl-2 `}>
           {steps?.map((step: any) => {
             return (
@@ -47,9 +43,9 @@ const StepDropDown: React.FunctionComponent<IStepDropDownProps> = ({
             );
           })}
         </ul>
-      )}
+      )} */}
     </div>
   );
 };
 
-export default StepDropDown;
+export default RepoDD;

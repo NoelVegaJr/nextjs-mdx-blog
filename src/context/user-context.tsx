@@ -21,7 +21,6 @@ const UserProvider: React.FunctionComponent<IUserProviderProps> = ({
   children,
 }) => {
   const { data: session } = useSession();
-  console.log('session: ', session);
 
   return (
     <UserContext.Provider

@@ -32,12 +32,13 @@ const Home = () => {
                 <button className='rounded bg-blue-500 bg-gradient-to-r from-blue-500 to-cyan-600 py-3 px-6 text-xl font-semibold text-white saturate-150 transition-all duration-300 hover:scale-105 hover:from-blue-500 '>
                   Get started
                 </button>
-                <button className='flex items-center  gap-2 rounded border bg-slate-400 bg-gradient-to-r from-slate-400 to-slate-300 py-3 px-6 text-xl font-semibold text-black transition-all duration-300 hover:scale-105  hover:bg-gray-50 hover:from-slate-500 hover:to-slate-300'>
+                <button className='group flex items-center gap-2  rounded border  py-3 px-6 text-xl font-semibold text-black transition-all duration-300 hover:scale-105 hover:bg-gray-50  hover:from-slate-500 hover:to-slate-400 '>
                   <Image
                     src='/GitHub-Mark-32px.png'
                     alt='GitHub logo'
                     width='20'
                     height='20'
+                    className=' rounded-full transition-all duration-300 group-hover:bg-slate-100 '
                   />
                   GitHub
                 </button>

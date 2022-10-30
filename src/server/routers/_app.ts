@@ -3,6 +3,7 @@ import { publicProcedure, router } from '../trpc';
 import { PrismaClient } from '@prisma/client';
 import pusher from '../../utils/pusher';
 import Input from '../../components/Input';
+import { formatBase64 } from '../../utils/formatBase64';
 
 const prisma: PrismaClient = new PrismaClient();
 
@@ -166,6 +167,88 @@ export const appRouter = router({
       });
 
       return response;
+    }),
+  getFileContent: publicProcedure
+    .input(
+      z.object({
+        username: z.string(),
+        repo: z.string(),
+        path: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { username, repo, path } = input;
+      console.log(input);
+      const response = await fetch(
+        `https://api.github.com/repos/${username}/${repo}/contents/${path}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization:
+              'Bearer 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',
+          },
+        }
+      );
+      const data = await response.json();
+      console.log('github data: ', data);
+      const base64String = data.content;
+
+      const result = formatBase64(base64String);
+      console.log(result);
+      return result;
+    }),
+  getUserRepos: publicProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ input }) => {
+      const { username } = input;
+      const response = await fetch(
+        `https://api.github.com/users/${username}/repos`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization:
+              'Bearer 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',
+          },
+        }
+      );
+      const repos = await response.json();
+      return repos;
+    }),
+  getRepo: publicProcedure
+    .input(z.object({ owner: z.string(), repo: z.string() }))
+    .query(async ({ input }) => {
+      const { owner, repo } = input;
+      const response = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/contents`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization:
+              'Bearer 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',
+          },
+        }
+      );
+      const content = await response.json();
+      console.log(content);
+      return content;
+    }),
+  getRepoContents: publicProcedure
+    .input(z.object({ owner: z.string(), repo: z.string(), path: z.string() }))
+    .query(async ({ input }) => {
+      const { owner, repo, path } = input;
+      const response = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization:
+              'Bearer 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',
+          },
+        }
+      );
+      const content = await response.json();
+      console.log(content);
+      return content;
     }),
 });
 

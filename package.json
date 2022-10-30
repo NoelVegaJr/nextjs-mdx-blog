@@ -17,6 +17,8 @@
     "@trpc/next": "^10.0.0-proxy-beta.26",
     "@trpc/react-query": "^10.0.0-proxy-beta.26",
     "@trpc/server": "^10.0.0-proxy-beta.26",
+    "framer-motion": "^7.6.2",
+    "get-current-line": "^6.6.0",
     "gray-matter": "^4.0.3",
     "next": "^12.3.1",
     "next-auth": "^4.15.0",
@@ -27,6 +29,7 @@
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "^18.2.0",
     "react-syntax-highlighter": "^15.5.0",
+    "react-text-mask": "^5.5.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {
@@ -35,6 +38,7 @@
     "@types/react-anchor-link-smooth-scroll": "^1.0.2",
     "@types/react-dom": "18.0.7",
     "@types/react-syntax-highlighter": "^15.5.5",
+    "@types/react-text-mask": "^5.4.11",
     "autoprefixer": "^10.4.12",
     "eslint": "8.26.0",
     "eslint-config-next": "^13.0.0",

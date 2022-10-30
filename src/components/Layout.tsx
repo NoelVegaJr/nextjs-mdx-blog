@@ -9,7 +9,7 @@ export function Layout({ children }: ILayoutProps) {
   return (
     <>
       <div className=' flex h-screen w-full flex-col'>
-        <div className='mb-32'>
+        <div className='mb-20'>
           <Nav />
         </div>
 
