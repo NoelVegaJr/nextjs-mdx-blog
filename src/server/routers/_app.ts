@@ -175,16 +175,12 @@ export const appRouter = router({
       const { url } = input;
       console.log('FILE URL: ', url);
       // console.log(input);
-      const response = await fetch(
-        // `https://api.github.com/repos/${username}/${repo}/contents/${path}`,
-        url,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
-          },
-        }
-      );
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
+        },
+      });
       const data = await response.json();
       console.log(data);
       const base64String = data.content;

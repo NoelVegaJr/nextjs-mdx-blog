@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { trpc } from '../utils/trpc';
 import AdminSideNav from '../components/Admin/AdminSideNav';
 import Tab from '../components/Admin/Tabs';
-import RepoFile from '../components/File';
+import RepoFile from '../components/RepoFile';
 import RepoContent from '../components/RepoDir';
 
 interface IAdminProps {}
