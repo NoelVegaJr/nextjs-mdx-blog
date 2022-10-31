@@ -225,22 +225,6 @@ export const appRouter = router({
       const content = await response.json();
       return content;
     }),
-  getRepoContents: publicProcedure
-    .input(z.object({ owner: z.string(), repo: z.string(), path: z.string() }))
-    .query(async ({ input }) => {
-      const { owner, repo, path } = input;
-      const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
-          },
-        }
-      );
-      const content = await response.json();
-      return content;
-    }),
 });
 
 // export type definition of API
