@@ -222,7 +222,9 @@ export const appRouter = router({
           Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
         },
       });
+      console.log(response);
       const content = await response.json();
+      console.log(content);
       return content;
     }),
 });
