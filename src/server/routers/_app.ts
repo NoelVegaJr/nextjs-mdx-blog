@@ -20,7 +20,6 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(input);
       await prisma.blogPost.create({
         data: input,
       });
@@ -85,7 +84,6 @@ export const appRouter = router({
         },
       });
 
-      console.log(blogPost);
       return blogPost;
     }),
   createBlogPostStep: publicProcedure
@@ -99,7 +97,6 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(input);
       await prisma.blogPostStep.create({
         data: {
           blogPostId: input.blogPostId,
@@ -120,7 +117,6 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(input);
       await prisma.blogPostStep.update({
         where: {
           id: input.id,
@@ -171,16 +167,17 @@ export const appRouter = router({
   getFileContent: publicProcedure
     .input(
       z.object({
-        username: z.string(),
-        repo: z.string(),
-        path: z.string(),
+        url: z.string(),
       })
     )
     .query(async ({ input }) => {
-      const { username, repo, path } = input;
-      console.log(input);
+      // const { username, repo, path } = input;
+      const { url } = input;
+      console.log('FILE URL: ', url);
+      // console.log(input);
       const response = await fetch(
-        `https://api.github.com/repos/${username}/${repo}/contents/${path}`,
+        // `https://api.github.com/repos/${username}/${repo}/contents/${path}`,
+        url,
         {
           method: 'GET',
           headers: {
@@ -189,18 +186,15 @@ export const appRouter = router({
         }
       );
       const data = await response.json();
-      console.log('github data: ', data);
       const base64String = data.content;
-
       const result = formatBase64(base64String);
       console.log(result);
-      return result;
+      return base64String;
     }),
   getUserRepos: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ input }) => {
       const { username } = input;
-      console.log(username);
       const response = await fetch(
         `https://api.github.com/users/${username}/repos`,
         {
@@ -211,24 +205,24 @@ export const appRouter = router({
         }
       );
       const repos = await response.json();
-      console.log(repos);
-      return repos;
+
+      return repos.map((repo: any) => {
+        return { id: repo.id, name: repo.name, url: repo.url };
+      });
     }),
   getRepo: publicProcedure
-    .input(z.object({ owner: z.string(), repo: z.string() }))
+    .input(z.object({ url: z.string() }))
     .query(async ({ input }) => {
-      const { owner, repo } = input;
-      const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/contents`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
-          },
-        }
-      );
+      const { url } = input;
+      // choose url based on opening a repo or contents of a sub dir
+      const finalUrl = url.includes('/contents/') ? url : `${url}/contents`;
+      const response = await fetch(finalUrl, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
+        },
+      });
       const content = await response.json();
-      console.log(content);
       return content;
     }),
   getRepoContents: publicProcedure
@@ -245,7 +239,6 @@ export const appRouter = router({
         }
       );
       const content = await response.json();
-      console.log(content);
       return content;
     }),
 });

@@ -10,27 +10,23 @@ import { REPL_MODE_SLOPPY } from 'repl';
 import RepoContent from '../components/Admin/Repo/RepoContent';
 import Tab from '../components/Admin/Tabs';
 import path from 'path';
+import RepoFile from '../components/File';
+import { number, string } from 'zod';
+import RepoDir from '../components/RepoDir';
 
 interface IAdminProps {}
 
 const Admin: React.FunctionComponent<IAdminProps> = (props) => {
   const userRepos = trpc.getUserRepos.useQuery({ username: 'NoelVegaJr' });
   const [tabIndex, setTabIndex] = useState(0);
-  const [openRepo, setOpenRepo] = useState('');
-  const [currentPath, setCurrentPath] = useState<string>('');
-  const [openFile, setOpenFile] = useState<{
+  const [openRepo, setOpenRepo] = useState<{
+    id: number;
     name: string;
     url: string;
-    size: number;
-    path: string;
   }>();
+
   const [tabs, setTabs] = useState<any[]>([]);
   const [openTab, setOpenTab] = useState<any>();
-  const [selectedRootTab, setSelectedRootTab] = useState('');
-  const repo = trpc.getRepo.useQuery({
-    owner: 'NoelVegaJr',
-    repo: openRepo,
-  });
 
   const closeTabHandler = (index: number) => {
     const newTabs = [...tabs.filter((tab) => tab.index !== index)];
@@ -38,7 +34,7 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     setOpenTab(newTabs[newTabs.length - 1]);
   };
 
-  const openRepoHandler = (repo: string) => {
+  const openRepoHandler = (repo: { id: number; name: string; url: string }) => {
     const alreadyOpen = tabs.filter(
       (tab) => tab.type === 'dir' && tab.name === repo
     );
@@ -46,13 +42,17 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
 
     setTabIndex((prev) => prev + 1);
     setOpenRepo(repo);
-    const newTab = { type: 'dir', index: tabIndex, name: repo };
+    const newTab = {
+      type: 'dir',
+      index: tabIndex,
+      data: { ...repo, url: repo.url.split('?')[0] },
+    };
     const newTabs = [...tabs, newTab];
     setTabs(newTabs);
     setOpenTab(newTab);
   };
 
-  const openFileHandler = (file: {
+  const openFileHandler = async (file: {
     name: string;
     content: string;
     url: string;
@@ -64,15 +64,6 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     if (files.map((file) => file.data.url).includes(cleanUrl)) return;
 
     setTabIndex((prev) => prev + 1);
-
-    setOpenFile((prev) => {
-      return {
-        name: file.name,
-        url: cleanUrl,
-        size: file.size,
-        path: file.path,
-      };
-    });
 
     const newTab = {
       type: 'file',
@@ -94,20 +85,11 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     return <div>Loading</div>;
   }
 
-  if (repo.error) {
-    return <div>error</div>;
-  }
-
-  if (openTab?.type === 'file') {
-    console.log('GET ', openTab.data.url);
-  }
-
   return (
     <div className='  flex h-full w-full '>
       <AdminSideNav
         repos={userRepos.data}
         openRepo={openRepoHandler}
-        setPath={setCurrentPath}
         activeRepo={openRepo}
       />
       <div className=' w-full'>
@@ -118,7 +100,7 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
                 <Tab
                   type={tab.type ? tab.type : 'dir'}
                   index={tab.index}
-                  name={tab.name}
+                  name={tab.data.name}
                   isOpen={tab.index === openTab.index}
                   open={openTabHandler}
                   close={closeTabHandler}
@@ -128,29 +110,29 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
           </ul>
         </nav>
         <div className='mx-auto mt-8 flex w-full max-w-3xl grow flex-col gap-8'>
-          <h2 className='text-3xl'>{openRepo}</h2>
+          <h2 className='text-3xl'>{openRepo?.name}</h2>
           <AnimatePresence mode='wait'>
             <motion.div
-              key={selectedRootTab ? selectedRootTab : 'empty'}
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -10, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              {!currentPath ? (
-                <Repo
-                  name={openRepo}
-                  setPath={setCurrentPath}
-                  path={currentPath}
-                  openFile={openFileHandler}
-                />
-              ) : (
-                <RepoContent
-                  openFile={openFileHandler}
-                  repoName={openRepo}
-                  path={currentPath}
-                  setPath={setCurrentPath}
-                />
+              {openTab && (
+                <>
+                  {openTab?.type === 'file' && (
+                    <RepoFile url={openTab.data.url} />
+                  )}
+                  {openTab?.type === 'dir' && (
+                    <RepoDir
+                      id={openTab.data.id}
+                      name={openTab.data.name}
+                      url={openTab.data.url}
+                      openFile={openFileHandler}
+                      openRepo={openRepoHandler}
+                    />
+                  )}
+                </>
               )}
             </motion.div>
           </AnimatePresence>

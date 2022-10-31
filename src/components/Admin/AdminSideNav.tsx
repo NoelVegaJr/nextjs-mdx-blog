@@ -10,20 +10,17 @@ import { UserContext } from '../../context/user-context';
 
 interface ISidePostsNavProps {
   repos: any;
-  activeRepo: string;
-  openRepo: (repo: string) => void;
-  setPath: Dispatch<SetStateAction<string>>;
+  activeRepo?: { id: number; name: string; url: string };
+  openRepo: (repo: { id: number; name: string; url: string }) => void;
 }
 
 const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
   repos,
   openRepo,
-  setPath,
   activeRepo,
 }) => {
   const [ddRepos, ddReposSet] = useState<boolean>(true);
   const [creatingNewBlogPost, isCreatingNewBlogPost] = useState(false);
-  console.log(activeRepo);
   return (
     <div className='border-right   h-full w-80 min-w-fit cursor-pointer border bg-white'>
       <button
@@ -72,8 +69,7 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
                   repo.name === activeRepo && 'text-blue-400'
                 }`}
                 onClick={() => {
-                  openRepo(repo.name);
-                  setPath('');
+                  openRepo(repo);
                 }}
               >
                 <p
