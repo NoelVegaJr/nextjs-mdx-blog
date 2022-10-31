@@ -59,7 +59,6 @@ export const appRouter = router({
 
         return user?.blogPosts ?? [];
       } catch (error) {
-        console.log(error);
         return [];
       }
     }),
@@ -140,7 +139,6 @@ export const appRouter = router({
         },
       });
 
-      console.log('STEPS: ', steps);
       return steps;
     }),
   pusherMsg: publicProcedure
@@ -154,7 +152,6 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(input);
       const response = await pusher.trigger(input.blogPostId, 'new-message', {
         message: input.msg,
         username: input.username,
@@ -173,8 +170,7 @@ export const appRouter = router({
     .query(async ({ input }) => {
       // const { username, repo, path } = input;
       const { url } = input;
-      console.log('FILE URL: ', url);
-      // console.log(input);
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -182,9 +178,9 @@ export const appRouter = router({
         },
       });
       const data = await response.json();
-      console.log(data);
-      const base64String = data.content;
-      return base64String;
+
+      const file = { base64: data.content, size: data.size };
+      return file;
     }),
   getUserRepos: publicProcedure
     .input(z.object({ username: z.string() }))
@@ -217,9 +213,9 @@ export const appRouter = router({
           Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
         },
       });
-      console.log(response);
+
       const content = await response.json();
-      console.log(content);
+
       return content;
     }),
 });

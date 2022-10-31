@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { iconParser } from '../utils/iconParser';
 import { trpc } from '../utils/trpc';
+import Image from 'next/image';
 
 interface IRepoDirProps {
   id: number;
@@ -8,6 +10,7 @@ interface IRepoDirProps {
   url: string;
   openFile: (file: any) => void;
   openRepo: (repo: any) => void;
+  openRepoDir: (repo: any) => void;
 }
 
 const RepoContent: React.FunctionComponent<IRepoDirProps> = ({
@@ -16,11 +19,23 @@ const RepoContent: React.FunctionComponent<IRepoDirProps> = ({
   url,
   openFile,
   openRepo,
+  openRepoDir,
 }: IRepoDirProps) => {
   console.log('URL: ', url);
   const repo = trpc.getRepo.useQuery({
     url: url,
   });
+  const [isRoot, setIsRoot] = useState(true);
+
+  useEffect(() => {
+    if (repo.data) {
+      console.log('Root: ', repo.data);
+      const isDir = repo.data.url?.includes('/contents/')
+        ? repo.data.url
+        : setIsRoot(false);
+      setIsRoot(false);
+    }
+  }, [repo.data]);
 
   if (repo.error) {
     return <div>Error getting repo {url}</div>;
@@ -38,21 +53,31 @@ const RepoContent: React.FunctionComponent<IRepoDirProps> = ({
           repo.data &&
           repo.data?.message !== 'This repository is empty.' &&
           repo?.data?.map((item: any, index: number) => {
-            console.log(item._links?.self.split('?')[0]);
             return (
               <li
                 key={index}
                 className='flex cursor-pointer list-none items-center gap-2 border-y border-slate-200 px-3 py-2 hover:bg-slate-100'
                 onClick={() => {
-                  if (item.type === 'dir') {
+                  console.log('Clicked Item: ', item);
+                  console.log();
+                  if (!item.url?.includes('/contents/')) {
                     openRepo(item);
-                  } else if (item.type === 'file') {
-                    console.log(item);
-                    openFile(item);
+                  } else {
+                    if (item.type === 'dir') {
+                      openRepoDir(item);
+                    } else if (item.type === 'file') {
+                      openFile(item);
+                    }
                   }
                 }}
               >
-                {item.type === 'dir' ? (
+                <Image
+                  src={iconParser(item.type, item.name)}
+                  alt='ext icon'
+                  width={16}
+                  height={16}
+                />
+                {/* {item.type === 'dir' ? (
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -82,7 +107,7 @@ const RepoContent: React.FunctionComponent<IRepoDirProps> = ({
                       d='M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z'
                     />
                   </svg>
-                )}
+                )} */}
 
                 <p className=''>{item.name}</p>
               </li>

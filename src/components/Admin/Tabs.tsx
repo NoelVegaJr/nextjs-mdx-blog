@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import * as React from 'react';
+import Image from 'next/image';
+import { iconParser } from '../../utils/iconParser';
 
 interface ITabProps {
   type: string;
@@ -26,7 +28,17 @@ const Tab: React.FunctionComponent<ITabProps> = ({
         } flex w-fit cursor-pointer gap-2 rounded-t border border-t border-l border-r border-slate-400 py-2 px-4 font-semibold`}
         onClick={() => open(index)}
       >
-        <p>{`${name}`}</p>
+        <p className='flex items-center gap-2'>
+          {
+            <Image
+              src={iconParser(type, name)}
+              alt='file ext'
+              width={14}
+              height={14}
+            />
+          }{' '}
+          {name}
+        </p>
         <div
           className='self-start text-red-700'
           onClick={(e) => {

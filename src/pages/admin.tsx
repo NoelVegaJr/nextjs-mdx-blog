@@ -5,6 +5,7 @@ import AdminSideNav from '../components/Admin/AdminSideNav';
 import Tab from '../components/Admin/Tabs';
 import RepoFile from '../components/RepoFile';
 import RepoContent from '../components/RepoDir';
+import { cleanGitHubUrl } from '../utils/CleanGitHubApiUrl';
 
 interface IAdminProps {}
 
@@ -24,6 +25,20 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     const newTabs = [...tabs.filter((tab) => tab.index !== index)];
     setTabs(newTabs);
     setOpenTab(newTabs[newTabs.length - 1]);
+  };
+
+  const openRepoDirHandler = (repo: {
+    id: number;
+    name: string;
+    url: string;
+  }) => {
+    const filteredTabs = tabs.filter(
+      (tab) => tab.index !== openTab.index
+    ) as any[];
+    const newTab = { ...openTab, data: { ...repo, url: repo.url } };
+    const newTabs = [...filteredTabs, newTab];
+    setTabs(newTabs);
+    setOpenTab(newTab);
   };
 
   const openRepoHandler = (repo: { id: number; name: string; url: string }) => {
@@ -73,6 +88,37 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
     setOpenTab(tab);
   };
 
+  const breadCrumbClickHandler = (url: string) => {
+    console.log('OPEN TAB: ', openTab);
+    console.log('TABS: ', tabs);
+    const filteredTabs = tabs.filter(
+      (tab) => tab.index !== openTab.index
+    ) as any[];
+
+    if (openTab.type === 'file') {
+      console.log('Breacrumb URL: ', url);
+
+      const tab = tabs.find((tab) => {
+        if (tab.data.url === url) {
+          console.log(tab.data.url, url);
+        }
+        return cleanGitHubUrl(tab.data.url) === url;
+      });
+      // console.log('REOPEN TAB: ', tab.data.url);
+      // console.log(tab.data.url);
+      setOpenTab(tab);
+      return;
+    }
+    const newTab = {
+      ...openTab,
+      type: 'dir',
+      data: { ...openTab.data, url: url },
+    };
+    const newTabs = [...filteredTabs, newTab];
+    setTabs(newTabs);
+    setOpenTab(newTab);
+  };
+
   if (userRepos.isLoading) {
     return <div>Loading</div>;
   }
@@ -101,8 +147,46 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
             ))}
           </ul>
         </nav>
-        <div className='mx-auto mt-8 flex w-full max-w-3xl grow flex-col gap-8'>
-          <h2 className='text-3xl'>{openTab?.data?.name}</h2>
+        <div className='mx-auto mt-8 flex w-full max-w-3xl grow flex-col '>
+          <h2 className='mb-6 text-3xl font-semibold'>{openTab?.data?.name}</h2>
+          <p className='mb-4 flex gap-1'>
+            {openTab?.data.url
+              .split('?')[0]
+              .split('/')
+              .slice(5, 10)
+              .map((crumb: string, index: number) => {
+                if (crumb === 'contents') return;
+                return (
+                  <>
+                    <span
+                      key={Math.random()}
+                      className='cursor-pointer font-semibold hover:text-blue-500'
+                      onClick={() => {
+                        let url = '';
+                        let foundCrumb = false;
+                        cleanGitHubUrl(openTab.data.url)
+                          .split('/')
+                          .forEach((urlFrag) => {
+                            if (!foundCrumb) {
+                              if (urlFrag !== crumb) {
+                                url += urlFrag + '/';
+                              } else {
+                                url += urlFrag;
+                                foundCrumb = true;
+                              }
+                            }
+                          });
+                        breadCrumbClickHandler(url);
+                        console.log('clicked', url);
+                      }}
+                    >
+                      {crumb}
+                    </span>
+                    <span key={Math.random()}>/</span>
+                  </>
+                );
+              })}
+          </p>
           <AnimatePresence mode='wait'>
             <motion.div
               initial={{ y: 10, opacity: 0 }}
@@ -120,8 +204,9 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
                       id={openTab.data.id}
                       name={openTab.data.name}
                       url={openTab.data.url}
-                      openFile={openFileHandler}
                       openRepo={openRepoHandler}
+                      openRepoDir={openRepoDirHandler}
+                      openFile={openFileHandler}
                     />
                   )}
                 </>

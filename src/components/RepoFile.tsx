@@ -7,38 +7,50 @@ interface IRepoFileProps {
 }
 
 const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
-  const base64 = trpc.getFileContent.useQuery({ url });
+  const file = trpc.getFileContent.useQuery({ url });
   const [code, setCode] = useState(['']);
 
   useEffect(() => {
-    if (base64.data) {
-      const rawString = formatBase64(base64.data);
+    if (file.data) {
+      const rawString = formatBase64(file.data.base64);
       const codeLines = rawString.split('\n');
       setCode(codeLines);
     }
-  }, [base64.data]);
-  console.log('BASE 64:  ', base64);
-  if (base64.isError) {
+  }, [file.data]);
+  console.log('BASE 64:  ', file);
+  if (file.isError) {
     return <div>Error</div>;
   }
 
-  if (base64.isLoading) {
+  if (file.isLoading) {
     return <div>Loading</div>;
   }
   return (
-    <div>
-      {code?.map((line, index: number) => {
-        return (
-          <li
-            className={`flex cursor-pointer list-none p-0.5 hover:bg-slate-100 `}
-            key={index}
-            onClick={() => console.log(index + 1)}
-          >
-            <div className='mr-8 text-orange-600'>{index + 1}</div>
-            <p>{line}</p>
-          </li>
-        );
-      })}
+    <div className='rounded-lg border '>
+      <div className='border-bottom border bg-neutral-50 p-2'>
+        <p className='flex gap-4'>
+          <span>{code.length} lines</span>
+          <span>
+            {file.data.size / 1000 > 1
+              ? `${file.data.size / 1000} kb`
+              : `${file.data.size} Bytes`}{' '}
+          </span>
+        </p>
+      </div>
+      <ul className='p-2'>
+        {code?.map((line, index: number) => {
+          return (
+            <li
+              className={`flex cursor-pointer list-none items-center p-0.5 hover:bg-slate-100 `}
+              key={index}
+              onClick={() => console.log(index + 1)}
+            >
+              <div className='mr-8 text-sm text-orange-600'>{index + 1}</div>
+              <p>{line}</p>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
