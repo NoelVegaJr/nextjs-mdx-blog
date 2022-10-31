@@ -7,7 +7,6 @@ interface IRepoFileProps {
 }
 
 const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
-  console.log('REPOFILE Url:');
   const base64 = trpc.getFileContent.useQuery({ url });
   const [code, setCode] = useState(['']);
 
@@ -17,7 +16,7 @@ const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
       const codeLines = rawString.split('\n');
       setCode(codeLines);
     }
-  }, [base64]);
+  }, [base64.data]);
   console.log(base64);
   if (base64.isError) {
     return <div>Error</div>;
