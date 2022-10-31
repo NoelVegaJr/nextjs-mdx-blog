@@ -188,8 +188,6 @@ export const appRouter = router({
       const data = await response.json();
       console.log(data);
       const base64String = data.content;
-      const result = formatBase64(base64String);
-      console.log(result);
       return base64String;
     }),
   getUserRepos: publicProcedure

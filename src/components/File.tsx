@@ -17,13 +17,13 @@ const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
       const codeLines = rawString.split('\n');
       setCode(codeLines);
     }
-  }, [base64.data]);
+  }, [base64]);
 
   if (base64.isError) {
     return <div>Error</div>;
   }
 
-  if (!base64.data) {
+  if (base64.isLoading) {
     return <div>Loading</div>;
   }
   return (
