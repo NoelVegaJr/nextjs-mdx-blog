@@ -18,7 +18,7 @@ const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
       setCode(codeLines);
     }
   }, [base64]);
-
+  console.log(base64);
   if (base64.isError) {
     return <div>Error</div>;
   }
