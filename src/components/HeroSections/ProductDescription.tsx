@@ -17,16 +17,20 @@ const ProductDescription: React.FunctionComponent<IProductDescriptionProps> = ({
   linkUrl,
 }) => {
   return (
-    <article className='mx-auto flex max-w-5xl items-center gap-32'>
-      <div className='flex  w-1/2 justify-center rounded-lg bg-white'>
+    <article className='flex w-full grow flex-col items-center lg:mx-auto lg:max-w-5xl lg:flex-row lg:gap-32'>
+      <div className=' justify-center  rounded-lg bg-white lg:flex lg:w-1/2'>
         <Image src={image} alt='' width='300' height='300' />
       </div>
-      <div className=' w-3/4 gap-8 p-6'>
-        <div className='flex flex-col gap-6'>
-          <h3 className=' text-left text-5xl font-bold'>{title}</h3>
-          <p className='text-left text-xl font-semibold'>{description}</p>
+      <div className='w-full  p-6 lg:w-3/4'>
+        <div className='flex w-full flex-col gap-6'>
+          <h3 className=' text-center text-3xl font-bold lg:text-left lg:text-5xl'>
+            {title}
+          </h3>
+          <p className='px-12 text-center text-xl font-semibold lg:p-0 lg:text-left'>
+            {description}
+          </p>
           <Link href={linkUrl}>
-            <div className='group w-fit cursor-pointer'>
+            <div className='group mx-auto w-fit cursor-pointer'>
               <a
                 href='#'
                 className='flex items-center gap-2 text-lg font-semibold text-cyan-600'

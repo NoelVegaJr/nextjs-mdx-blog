@@ -4,7 +4,7 @@ import { trpc } from '../utils/trpc';
 import AdminSideNav from '../components/Admin/AdminSideNav';
 import Tab from '../components/Admin/Tabs';
 import RepoFile from '../components/File';
-import RepoDir from '../components/RepoDir';
+import RepoContent from '../components/RepoDir';
 
 interface IAdminProps {}
 
@@ -102,7 +102,7 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
           </ul>
         </nav>
         <div className='mx-auto mt-8 flex w-full max-w-3xl grow flex-col gap-8'>
-          <h2 className='text-3xl'>{openRepo?.name}</h2>
+          <h2 className='text-3xl'>{openTab?.data?.name}</h2>
           <AnimatePresence mode='wait'>
             <motion.div
               initial={{ y: 10, opacity: 0 }}
@@ -116,7 +116,7 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
                     <RepoFile url={openTab.data.url} />
                   )}
                   {openTab?.type === 'dir' && (
-                    <RepoDir
+                    <RepoContent
                       id={openTab.data.id}
                       name={openTab.data.name}
                       url={openTab.data.url}

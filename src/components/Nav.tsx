@@ -14,11 +14,11 @@ const Nav: React.FC<INavProps> = (props) => {
 
   return (
     <nav className=' fixed z-50 flex h-20 w-full items-center justify-between border-b border-b-gray-400 bg-slate-800 p-8 text-white'>
-      <div className='flex items-center'>
+      <div className='flex gap-8'>
         {router.pathname === '/' ? (
           <AnchorLink
             href='#landing'
-            className={`${logoStyles}  mr-12 text-3xl font-semibold`}
+            className={`${logoStyles}  w-fit text-3xl font-semibold`}
             offset='150'
           >
             Code Fork
@@ -33,38 +33,39 @@ const Nav: React.FC<INavProps> = (props) => {
             </a>
           </Link>
         )}
-
-        {router.pathname === '/' && (
-          <>
-            <AnchorLink
-              href='#product'
-              className={`${logoStyles}  mr-12 text-lg font-semibold`}
-              offset='75'
-            >
-              Product
-            </AnchorLink>
-            <AnchorLink
-              href='#features'
-              className={`${logoStyles}  mr-12 text-lg font-semibold`}
-              offset='10'
-            >
-              Features
-            </AnchorLink>
-            {/* <Link href='/'>
+        <div className='hidden items-center lg:flex'>
+          {router.pathname === '/' && (
+            <>
+              <AnchorLink
+                href='#product'
+                className={`${logoStyles}  mr-12 text-lg font-semibold`}
+                offset='75'
+              >
+                Product
+              </AnchorLink>
+              <AnchorLink
+                href='#features'
+                className={`${logoStyles}  mr-12 text-lg font-semibold`}
+                offset='10'
+              >
+                Features
+              </AnchorLink>
+              {/* <Link href='/'>
           <a className={`${logoStyles}  mr-12 text-lg font-semibold`}>
             Company
           </a>
         </Link> */}
-            <Link href='/admin'>
-              <a
-                href='#'
-                className={`${logoStyles}  mr-12 text-lg font-semibold`}
-              >
-                Demo
-              </a>
-            </Link>
-          </>
-        )}
+              <Link href='/admin'>
+                <a
+                  href='#'
+                  className={`${logoStyles}  mr-12 text-lg font-semibold`}
+                >
+                  Demo
+                </a>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
       <div className='flex items-center gap-4 text-xl'>
         {!session ? (

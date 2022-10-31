@@ -13,8 +13,8 @@ export function Layout({ children }: ILayoutProps) {
           <Nav />
         </div>
 
-        <div className='min-h-0 grow '>
-          <div className='h-full'>{children}</div>
+        <div className='min-h-0 w-full grow'>
+          <div className='h-full w-full'>{children}</div>
         </div>
       </div>
     </>

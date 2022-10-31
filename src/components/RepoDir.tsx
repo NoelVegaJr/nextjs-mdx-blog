@@ -10,7 +10,7 @@ interface IRepoDirProps {
   openRepo: (repo: any) => void;
 }
 
-const RepoDir: React.FunctionComponent<IRepoDirProps> = ({
+const RepoContent: React.FunctionComponent<IRepoDirProps> = ({
   id,
   name,
   url,
@@ -93,4 +93,4 @@ const RepoDir: React.FunctionComponent<IRepoDirProps> = ({
   );
 };
 
-export default RepoDir;
+export default RepoContent;

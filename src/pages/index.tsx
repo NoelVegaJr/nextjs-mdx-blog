@@ -13,10 +13,10 @@ const Home = () => {
     <>
       <div
         id='landing'
-        className='flex h-full flex-col gap-8 bg-white px-4 sm:px-12'
+        className='flex h-full w-full  flex-col gap-8 bg-white px-4 sm:px-12'
       >
-        <div className='flex h-full '>
-          <div className='grid h-full w-1/2 place-items-center '>
+        <div className='flex h-full w-full'>
+          <div className='grid h-full w-full place-items-center lg:w-1/2 '>
             <div>
               <h1 className=' mb-6 text-5xl font-bold text-black  drop-shadow-2xl'>
                 A{' '}
@@ -45,8 +45,8 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className='h-full w-1/2'>
-            <div className='grid h-full place-items-center'>
+          <div className='hidden h-full  w-1/2  place-items-center lg:grid'>
+            <div className='  '>
               <Image
                 src='/employees-doing-planning-of-work.png'
                 alt='employees working'
@@ -59,7 +59,7 @@ const Home = () => {
       </div>
       <section
         id='product'
-        className='flex  flex-col justify-evenly gap-16 bg-orange-50 py-20'
+        className='flex  w-full grow flex-col justify-evenly gap-32 bg-orange-50 py-20 lg:gap-16'
       >
         <ProductDescription
           title='Documenting your app made easy.'
@@ -84,7 +84,7 @@ const Home = () => {
           linkUrl='/'
         />
       </section>
-      <section id='features' className='py-32'>
+      <section id='features' className='hidden py-32 lg:block'>
         <div>
           {/* <h3 className='mb-12 text-center text-5xl font-semibold'>Features</h3> */}
           <div className=' justify flex justify-evenly gap-6 px-6'>
@@ -152,15 +152,15 @@ const Home = () => {
         </div>
       </section>
       <section id='' className=''>
-        <div className='flex flex-col gap-12 bg-slate-900 py-32'>
-          <h3 className=' text-center text-5xl font-bold text-white'>
+        <div className='flex flex-col gap-12 bg-slate-900 py-16 px-4'>
+          <h3 className=' text-center text-2xl font-bold text-white lg:text-5xl'>
             Welcome to the encylopedia of code
           </h3>
-          <div className='flex justify-center gap-8'>
-            <button className='rounded bg-slate-50 py-4 px-6 font-semibold text-slate-900'>
+          <div className='flex w-full flex-col justify-center gap-8 px-8 sm:flex-row lg:px-40'>
+            <button className='rounded bg-slate-50 py-4 px-6 text-lg font-semibold text-slate-900 md:w-1/2'>
               Create an account today
             </button>
-            <button className='rounded border py-4 px-6 font-semibold text-white'>
+            <button className='rounded border py-4 px-6 text-lg font-semibold text-white md:w-1/2'>
               Continue as a guest
             </button>
           </div>

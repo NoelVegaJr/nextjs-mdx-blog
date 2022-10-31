@@ -1,12 +1,8 @@
 import * as React from 'react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import NewBlogPostForm from './NewBlogPostForm';
-import RepoDD from './SideNavigation/RepoDropDown';
 import Modal from '../Modal';
-import autoAnimate from '@formkit/auto-animate';
-import { trpc } from '../../utils/trpc';
-import { useContext } from 'react';
-import { UserContext } from '../../context/user-context';
+import SideNavRepo from '../SideNavRepo';
 
 interface ISidePostsNavProps {
   repos: any;
@@ -21,6 +17,7 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
 }) => {
   const [ddRepos, ddReposSet] = useState<boolean>(true);
   const [creatingNewBlogPost, isCreatingNewBlogPost] = useState(false);
+
   return (
     <div className='border-right   h-full w-80 min-w-fit cursor-pointer border bg-white'>
       <button
@@ -63,26 +60,13 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
           repos &&
           repos?.map((repo: any, index: number) => {
             return (
-              <li
-                key={index}
-                className={`cursor-pointer list-none p-1 px-2 text-lg ${
-                  repo.name === activeRepo && 'text-blue-400'
-                }`}
-                onClick={() => {
-                  openRepo(repo);
-                }}
-              >
-                <p
-                  className={`${
-                    repo.name === activeRepo
-                      ? 'text-blue-600'
-                      : 'text-slate-500'
-                  } font-semibold`}
-                >
-                  {repo.name.slice(0, 20) +
-                    (repo.name.length >= 20 ? '...' : '')}
-                </p>
-              </li>
+              <SideNavRepo
+                key={repo.id}
+                index={index}
+                repoName={repo.name}
+                isActive={repo.name === activeRepo?.name}
+                onClick={() => openRepo(repo)}
+              />
             );
           })}
       </div>
