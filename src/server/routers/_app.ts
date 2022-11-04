@@ -4,6 +4,8 @@ import { PrismaClient } from '@prisma/client';
 import pusher from '../../utils/pusher';
 import Input from '../../components/Input';
 import { formatBase64 } from '../../utils/formatBase64';
+import { cleanGitHubUrl } from '../../utils/CleanGitHubApiUrl';
+import Repo from '../../utils/Tree';
 
 const prisma: PrismaClient = new PrismaClient();
 
@@ -204,19 +206,43 @@ export const appRouter = router({
   getRepo: publicProcedure
     .input(z.object({ url: z.string() }))
     .query(async ({ input }) => {
+      const tree = {};
       const { url } = input;
-      // choose url based on opening a repo or contents of a sub dir
-      const finalUrl = url.includes('/contents/') ? url : `${url}/contents`;
-      const response = await fetch(finalUrl, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
-        },
+      const queue = [url] as any;
+
+      const getContents = async (url: string) => {
+        const cleanUrl = cleanGitHubUrl(url);
+        const finalUrl = cleanUrl.includes('/contents/')
+          ? cleanUrl
+          : `${cleanUrl}/contents`;
+        const response = await fetch(finalUrl, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
+          },
+        });
+
+        return response.json();
+      };
+
+      const contents = await getContents(url);
+      contents.forEach((content: any) => {
+        if (content.type === 'dir') {
+          queue.push({
+            type: content.type,
+            url: cleanGitHubUrl(content.url),
+            children: [] as any,
+          });
+        }
       });
+      console.log('QUEUE: ', queue);
+    }),
+  getRepoContent: publicProcedure
+    .input(z.object({ url: z.string() }))
+    .query(async ({ input }) => {
+      const { url } = input;
 
-      const content = await response.json();
-
-      return content;
+      return { message: 'hello' };
     }),
 });
 

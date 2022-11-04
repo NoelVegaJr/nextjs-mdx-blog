@@ -17,7 +17,7 @@ const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
       setCode(codeLines);
     }
   }, [file.data]);
-  console.log('BASE 64:  ', file);
+
   if (file.isError) {
     return <div>Error</div>;
   }

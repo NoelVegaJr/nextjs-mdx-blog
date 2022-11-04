@@ -6,6 +6,7 @@ import Tab from '../components/Admin/Tabs';
 import RepoFile from '../components/RepoFile';
 import RepoContent from '../components/RepoDir';
 import { cleanGitHubUrl } from '../utils/CleanGitHubApiUrl';
+import Crumbs from '../components/Crumb';
 
 interface IAdminProps {}
 
@@ -89,34 +90,42 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
   };
 
   const breadCrumbClickHandler = (url: string) => {
-    console.log('OPEN TAB: ', openTab);
-    console.log('TABS: ', tabs);
-    const filteredTabs = tabs.filter(
-      (tab) => tab.index !== openTab.index
-    ) as any[];
+    console.log(tabs);
+    console.log(url);
+    const existingTab = tabs.find((tab) => {
+      return cleanGitHubUrl(tab.data.url) === url;
+    });
 
-    if (openTab.type === 'file') {
-      console.log('Breacrumb URL: ', url);
-
-      const tab = tabs.find((tab) => {
-        if (tab.data.url === url) {
-          console.log(tab.data.url, url);
-        }
-        return cleanGitHubUrl(tab.data.url) === url;
-      });
-      // console.log('REOPEN TAB: ', tab.data.url);
-      // console.log(tab.data.url);
-      setOpenTab(tab);
-      return;
+    if (existingTab) {
+      console.log('switch tab');
+      setOpenTab(existingTab);
+    } else {
+      console.log('change path of existing tab');
     }
-    const newTab = {
-      ...openTab,
-      type: 'dir',
-      data: { ...openTab.data, url: url },
-    };
-    const newTabs = [...filteredTabs, newTab];
-    setTabs(newTabs);
-    setOpenTab(newTab);
+
+    console.log(existingTab);
+    // console.log(tabs);
+    // const filteredTabs = tabs.filter(
+    //   (tab) => tab.index !== openTab.index
+    // ) as any[];
+    // console.log('Other open tabs: ', filteredTabs);
+    // if (openTab.type === 'file') {
+    //   const tab = tabs.find((tab) => {
+    //     if (tab.data.url === url) {
+    //     }
+    //     return cleanGitHubUrl(tab.data.url) === url;
+    //   });
+    //   setOpenTab(tab);
+    //   return;
+    // }
+    // const newTab = {
+    //   ...openTab,
+    //   type: 'dir',
+    //   data: { ...openTab.data, url: url },
+    // };
+    // const newTabs = [...filteredTabs, newTab];
+    // setTabs(newTabs);
+    // setOpenTab(newTab);
   };
 
   if (userRepos.isLoading) {
@@ -150,42 +159,60 @@ const Admin: React.FunctionComponent<IAdminProps> = (props) => {
         <div className='mx-auto mt-8 flex w-full max-w-3xl grow flex-col '>
           <h2 className='mb-6 text-3xl font-semibold'>{openTab?.data?.name}</h2>
           <p className='mb-4 flex gap-1'>
-            {openTab?.data.url
-              .split('?')[0]
-              .split('/')
-              .slice(5, 10)
-              .map((crumb: string, index: number) => {
-                if (crumb === 'contents') return;
-                return (
-                  <>
-                    <span
-                      key={Math.random()}
-                      className='cursor-pointer font-semibold hover:text-blue-500'
-                      onClick={() => {
-                        let url = '';
-                        let foundCrumb = false;
+            {openTab?.data && (
+              <Crumbs url={cleanGitHubUrl(openTab.data.url)} />
+              // <span>
+              //   {cleanGitHubUrl(openTab.data.url)
+              //     .split('/')
+              //     .slice(5, 10)
+              //     .join('/')}
+              // </span>
+            )}
+            {/* {openTab &&
+              cleanGitHubUrl(openTab?.data.url)
+                .split('/')
+                .slice(5, 10)
+                .map((crumb: string, index: number) => {
+                  return (
+                    <Crumb
+                      key={crumb}
+                      url={
                         cleanGitHubUrl(openTab.data.url)
                           .split('/')
-                          .forEach((urlFrag) => {
-                            if (!foundCrumb) {
-                              if (urlFrag !== crumb) {
-                                url += urlFrag + '/';
-                              } else {
-                                url += urlFrag;
-                                foundCrumb = true;
+                          .slice(0, 6)
+                          .join('/') +
+                        '/' +
+                        crumb
+                      }
+                    />
+                    <>
+                      <span
+                        key={Math.random()}
+                        className='cursor-pointer font-semibold hover:text-blue-500'
+                        onClick={() => {
+                          let url = '';
+                          let foundCrumb = false;
+                          cleanGitHubUrl(openTab.data.url)
+                            .split('/')
+                            .forEach((urlFrag) => {
+                              if (!foundCrumb) {
+                                if (urlFrag !== crumb) {
+                                  url += urlFrag + '/';
+                                } else {
+                                  url += urlFrag;
+                                  foundCrumb = true;
+                                }
                               }
-                            }
-                          });
-                        breadCrumbClickHandler(url);
-                        console.log('clicked', url);
-                      }}
-                    >
-                      {crumb}
-                    </span>
-                    <span key={Math.random()}>/</span>
-                  </>
-                );
-              })}
+                            });
+                          breadCrumbClickHandler(url);
+                        }}
+                      >
+                        {crumb}
+                      </span>
+                      <span key={Math.random()}>/</span>
+                    </>
+                  );
+                })} */}
           </p>
           <AnimatePresence mode='wait'>
             <motion.div
