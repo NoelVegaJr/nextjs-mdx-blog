@@ -1,25 +1,32 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import NewBlogPostForm from './NewBlogPostForm';
 import Modal from '../Modal';
 import SideNavRepo from '../SideNavRepo';
+import { RepoItem } from '../../classes/RepoTree';
+import { TabsContext } from '../../context/tabs-context';
+import { useUnmountEffect } from 'framer-motion';
 
 interface ISidePostsNavProps {
   repos: any;
-  activeRepo?: { id: number; name: string; url: string };
-  openRepo: (repo: { id: number; name: string; url: string }) => void;
+  activeRepo?: string;
+  // activeRepo?: { id: number; name: string; url: string };
+  // openRepo: (repo: { id: number; name: string; url: string }) => void;
+  // openRepo: (repoUrl: string) => void;
 }
 
 const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
   repos,
-  openRepo,
+  // openRepo,
   activeRepo,
 }) => {
+  const tabsCtx = useContext(TabsContext);
   const [ddRepos, ddReposSet] = useState<boolean>(true);
   const [creatingNewBlogPost, isCreatingNewBlogPost] = useState(false);
+  useEffect(() => {}, [tabsCtx]);
 
   return (
-    <div className='border-right   h-full w-80 min-w-fit cursor-pointer border bg-white'>
+    <div className='border-right   h-full w-80 min-w-fit cursor-pointer  overflow-y-auto border bg-white'>
       <button
         onClick={() => isCreatingNewBlogPost(true)}
         className=' w-full  rounded p-2 px-2 text-left text-lg font-semibold'
@@ -33,7 +40,7 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
           </div>
         </Modal>
       )}
-      <div className='border-bottom border py-2'>
+      <div className='border-bottom  border py-2'>
         <div
           className='flex items-center justify-between px-2 text-lg font-semibold'
           onClick={() => {
@@ -64,8 +71,15 @@ const AdminSideNav: React.FunctionComponent<ISidePostsNavProps> = ({
                 key={repo.id}
                 index={index}
                 repoName={repo.name}
-                isActive={repo.name === activeRepo?.name}
-                onClick={() => openRepo(repo)}
+                isActive={repo.name === activeRepo}
+                onClick={() => {
+                  // openRepo(repo.url + '/contents');
+                  tabsCtx?.newTab({
+                    type: 'root',
+                    name: repo.name,
+                    contentUrl: repo.url + '/contents' ,
+                  });
+                }}
               />
             );
           })}

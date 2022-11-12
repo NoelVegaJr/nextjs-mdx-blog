@@ -1,41 +1,48 @@
 import { formatBase64 } from '../utils/formatBase64';
+import { v4 as uuidv4 } from 'uuid';
 
-export type RepoItemType = 'file' | 'dir';
+export type RepoItemType = 'file' | 'dir' | null;
 
 export class RepoItem {
-  private _parent: RepoDir | null = null;
-  private _type: 'file' | 'dir' | null = null;
-  private _url: string;
-  private _id: number;
+  private _parent: string | null = null;
+  public type: 'file' | 'dir' | null = null;
+  public url: string;
+  public name: string;
+  private _id: string;
 
   constructor(type: RepoItemType, url: string) {
-    this._type = type;
-    this._url = url;
-    this._id = Math.random() * Date.now();
+    this.type = type;
+    this.url = url;
+    this.name = url.split('/')[url.split('/').length - 1];
+    this._id = uuidv4();
   }
 
-  public get identifier(): number {
+  public get identifier(): string {
     return this._id;
   }
 
-  public get url(): string {
-    return this._url;
-  }
-
-  public get parent(): RepoDir | null {
+  public get parent(): string | null {
     return this._parent;
   }
 
-  public set parent(newParent: any) {
+  public set parent(newParent: string | null) {
+    console.log('begin setting parent: ', newParent);
+    console.log(newParent !== this.parent);
+    console.log(newParent === null);
     if (
-      newParent !== this._parent &&
-      (newParent === null || newParent instanceof RepoDir)
+      newParent !== this.parent &&
+      (newParent === null || typeof newParent === 'string')
     ) {
+      // if (this.parent) {
+      //   this.parent.removeItem(this);
+      // }
       this._parent = newParent;
+      console.log('parent: ', this._parent);
 
-      if (newParent) {
-        newParent.appendChildNode(this);
-      }
+      // if (newParent) {
+      //   console.log('setting parent');
+      //   newParent.appendItem(this);
+      // }
     }
   }
 }
@@ -50,7 +57,7 @@ export class RepoFile extends RepoItem {
     const response = await fetch(this.url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`,
       },
     });
 
@@ -61,7 +68,7 @@ export class RepoFile extends RepoItem {
 }
 
 export class RepoDir extends RepoItem {
-  private _items = new Map();
+  public items: RepoItem[] = [];
 
   constructor(url: string) {
     super('dir', url);
@@ -71,7 +78,7 @@ export class RepoDir extends RepoItem {
     const response = await fetch(this.url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`,
       },
     });
 
@@ -80,26 +87,47 @@ export class RepoDir extends RepoItem {
   }
 
   public get itemCount(): number {
-    return this._items.size;
-  }
-
-  public get items(): Array<RepoItem> {
-    return Array.from(this._items.values());
+    return this.items.length;
   }
 
   public appendItem(item: RepoItem) {
-    if (!(item instanceof RepoItem)) return;
+    // must be a repo item
+    if (!(item instanceof RepoItem || this.hasItem(item))) return;
     if (item === this) throw new Error('Node cannot contain itself');
 
     let parent = this.parent;
 
-    while (parent !== null) {
-      if (parent === item) {
-        throw new Error('Item cannot contain one of its ancestors');
-      }
-      parent = parent.parent;
+    // traverse your way up to root
+    // while (parent !== null) {
+    //   if (parent === item.parent) {
+    //     throw new Error('Item cannot contain one of its ancestors');
+    //   }
+    //   // parent = parent.parent;
+    // }
+    this.items.push(item);
+    item.parent = this.url;
+  }
+
+  public removeItem(repoItem: RepoItem) {
+    this.items = this.items.filter((item) => item !== repoItem);
+  }
+
+  public hasItem(needle: any): boolean {
+    if (needle instanceof RepoItem) {
+      const foundItem = this.items.map(
+        (item) => item.identifier === needle.identifier
+      );
+      if (foundItem) return true;
+      return false;
     }
-    this._items.set(item.identifier, item);
+
+    for (let item of this.items) {
+      if (item.url === needle || this.identifier === needle) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

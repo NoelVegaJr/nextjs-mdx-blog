@@ -22,6 +22,8 @@ export const iconParser = (type: string, name: string) => {
     }
   } else if (type === 'dir') {
     image = '/folder.png';
+  } else if (type === 'root') {
+    image = '/root.png';
   }
   return image;
 };

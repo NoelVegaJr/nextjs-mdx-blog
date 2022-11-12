@@ -29,14 +29,16 @@ const Tab: React.FunctionComponent<ITabProps> = ({
         onClick={() => open(index)}
       >
         <p className='flex items-center gap-2'>
-          {
+          {type === 'profile' ? (
+            'Profile'
+          ) : (
             <Image
               src={iconParser(type, name)}
               alt='file ext'
               width={14}
               height={14}
             />
-          }{' '}
+          )}{' '}
           {name}
         </p>
         <div

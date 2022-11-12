@@ -64,13 +64,7 @@ export default class Repo {
     return this._children.size;
   }
 
-  public createChildNode(username: string, name: string): any {
-    const newNode = new Repo(username, name);
-    newNode.parent = this;
-    this._children.set(newNode.identifier, newNode);
 
-    return newNode;
-  }
 
   public removeChildNode(needle: any) {
     if (!this.hasChildNode(needle)) return;

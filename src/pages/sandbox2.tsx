@@ -37,23 +37,11 @@ const Test: React.FunctionComponent<ITestProps> = (props) => {
   // const repoFile = new RepoFile(
   //   'https://api.github.com/repos/NoelVegaJr/nextjs-mdx-blog/contents/src/pages/index.tsx'
   // );
-
-  const repoDir = new RepoDir(
-    'https://api.github.com/repos/NoelVegaJr/nextjs-mdx-blog/contents/src/components'
-  );
-
-  repoDir.getContent().then((items) => {
-    items.forEach((item: any) => {
-      if (item.type === 'file') {
-        const file = new RepoFile(item.url.split('?')[0]);
-        repoDir.appendItem(file);
-      } else if (item.type === 'dir') {
-        const dir = new RepoDir(item.url.split('?')[0]);
-        repoDir.appendItem(dir);
-      }
-    });
-    console.log(repoDir.items);
+  const repoTree = trpc.getRepoTree.useQuery({
+    url: 'https://api.github.com/repos/NoelVegaJr/gophercises/contents',
   });
+
+  console.log(repoTree.data);
 
   return <div></div>;
 };

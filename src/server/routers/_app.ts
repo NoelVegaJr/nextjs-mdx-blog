@@ -6,6 +6,7 @@ import Input from '../../components/Input';
 import { formatBase64 } from '../../utils/formatBase64';
 import { cleanGitHubUrl } from '../../utils/CleanGitHubApiUrl';
 import Repo from '../../utils/Tree';
+import { RepoDir, RepoFile } from '../../classes/RepoTree';
 
 const prisma: PrismaClient = new PrismaClient();
 
@@ -209,40 +210,48 @@ export const appRouter = router({
       const tree = {};
       const { url } = input;
       const queue = [url] as any;
-
-      const getContents = async (url: string) => {
-        const cleanUrl = cleanGitHubUrl(url);
-        const finalUrl = cleanUrl.includes('/contents/')
-          ? cleanUrl
-          : `${cleanUrl}/contents`;
-        const response = await fetch(finalUrl, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
-          },
-        });
-
-        return response.json();
-      };
-
-      const contents = await getContents(url);
-      contents.forEach((content: any) => {
-        if (content.type === 'dir') {
-          queue.push({
-            type: content.type,
-            url: cleanGitHubUrl(content.url),
-            children: [] as any,
-          });
-        }
+      console.log(url);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_API_TOKEN}`,
+        },
       });
-      console.log('QUEUE: ', queue);
+
+      return response.json();
     }),
-  getRepoContent: publicProcedure
+  getRepoTree: publicProcedure
     .input(z.object({ url: z.string() }))
     .query(async ({ input }) => {
       const { url } = input;
+      console.log('root url:', url);
+      const root = new RepoDir(url);
+      console.log('root:', root);
+      let queue: Array<{ id: string; item: RepoDir }> = [];
+      queue.push({ id: root.identifier, item: root });
 
-      return { message: 'hello' };
+      console.log('Entering queue');
+      while (queue.length) {
+        for (let repoDir of queue) {
+          console.log(repoDir.item.url);
+          const dirItems = await repoDir.item.getContent();
+
+          dirItems.forEach((item: any) => {
+            if (item.type === 'dir') {
+              const newRepoDir = new RepoDir(item.url.split('?')[0]);
+              repoDir.item.appendItem(newRepoDir);
+              queue.push({ id: newRepoDir.identifier, item: newRepoDir });
+            } else if (item.type === 'file') {
+              const newRepoFile = new RepoFile(item.url.split('?')[0]);
+              repoDir.item.appendItem(newRepoFile);
+            }
+          });
+          queue = queue.filter((item) => item.id !== repoDir.id);
+        }
+      }
+      // console.log('exiting queue');
+      // console.log(root.items);
+      return root;
     }),
 });
 

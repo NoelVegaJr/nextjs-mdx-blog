@@ -7,6 +7,7 @@ interface IRepoFileProps {
 }
 
 const RepoFile: React.FunctionComponent<IRepoFileProps> = ({ url }) => {
+  console.log('file url: ', url);
   const file = trpc.getFileContent.useQuery({ url });
   const [code, setCode] = useState(['']);
 

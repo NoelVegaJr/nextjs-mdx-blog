@@ -4,12 +4,8 @@ import ProductDescription from '../components/HeroSections/ProductDescription';
 import { trpc } from '../utils/trpc';
 
 interface IHomeProps {}
-const Home = () => {
-  const posts = trpc.getBlogPosts.useQuery();
 
-  if (!posts.data || posts.isLoading) {
-    return <div>Loading...</div>;
-  }
+const Home = () => {
   return (
     <>
       <div
